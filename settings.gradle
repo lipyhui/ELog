@@ -1,1 +1,1 @@
-include ':app', ':elogger'
+include ':app', ':elog'
