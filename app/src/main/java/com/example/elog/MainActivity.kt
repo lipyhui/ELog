@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.android.lipy.elog.AndroidLogAdapter
-import com.android.lipy.elog.DiskLogAdapter
+import com.android.lipy.elog.adapter.AndroidLogAdapter
+import com.android.lipy.elog.adapter.DiskLogAdapter
 import com.android.lipy.elog.ELog
 import kotlinx.android.synthetic.main.activity_main.*
 

@@ -1,8 +1,9 @@
-package com.android.lipy.elog
+package com.android.lipy.elog.strategy
 
 import android.os.Environment
 import android.os.HandlerThread
 import com.android.lipy.elog.LoggerPrinter.Companion.DEFAULT_TAG
+import com.android.lipy.elog.Utils
 import com.android.lipy.elog.interfaces.FormatStrategy
 import com.android.lipy.elog.interfaces.LogStrategy
 import java.io.File
@@ -14,7 +15,7 @@ import java.util.*
  * Writes to CSV the following data:
  * epoch timestamp, ISO8601 timestamp (human-readable), log level, tag, log message.
  */
-class CsvFormatStrategy private constructor(builder: Builder) : FormatStrategy {
+internal class CsvFormatStrategy private constructor(builder: Builder) : FormatStrategy {
 
     private val date: Date
     private val dateFormat: SimpleDateFormat

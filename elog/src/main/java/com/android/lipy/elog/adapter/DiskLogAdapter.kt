@@ -1,5 +1,6 @@
-package com.android.lipy.elog
+package com.android.lipy.elog.adapter
 
+import com.android.lipy.elog.strategy.CsvFormatStrategy
 import com.android.lipy.elog.interfaces.FormatStrategy
 import com.android.lipy.elog.interfaces.LogAdapter
 

@@ -1,5 +1,7 @@
-package com.android.lipy.elog
+package com.android.lipy.elog.strategy
 
+import com.android.lipy.elog.ELog
+import com.android.lipy.elog.LoggerPrinter
 import com.android.lipy.elog.LoggerPrinter.Companion.DEFAULT_TAG
 import com.android.lipy.elog.interfaces.FormatStrategy
 import com.android.lipy.elog.interfaces.LogStrategy
@@ -34,7 +36,7 @@ import com.android.lipy.elog.interfaces.LogStrategy
  * .build();
  * </pre>
  */
-class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrategy {
+internal class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrategy {
 
     private val methodCount: Int
     private val methodOffset: Int

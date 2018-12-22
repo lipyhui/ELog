@@ -1,7 +1,7 @@
 package com.android.lipy.elog.interfaces
 
-import com.android.lipy.elog.DiskLogStrategy
-import com.android.lipy.elog.LogcatLogStrategy
+import com.android.lipy.elog.strategy.DiskLogStrategy
+import com.android.lipy.elog.strategy.LogcatLogStrategy
 
 /**
  * Determines destination target for the logs such as Disk, Logcat etc.

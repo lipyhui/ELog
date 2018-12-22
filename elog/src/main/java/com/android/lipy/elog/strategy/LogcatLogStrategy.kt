@@ -1,4 +1,4 @@
-package com.android.lipy.elog
+package com.android.lipy.elog.strategy
 
 import android.util.Log
 import com.android.lipy.elog.LoggerPrinter.Companion.DEFAULT_TAG
@@ -9,7 +9,7 @@ import com.android.lipy.elog.interfaces.LogStrategy
  *
  * This simply prints out all logs to Logcat by using standard [Log] class.
  */
-class LogcatLogStrategy : LogStrategy {
+internal class LogcatLogStrategy : LogStrategy {
 
     override fun log(priority: Int, tag: String?, message: String) {
         var onceOnlyTag = tag

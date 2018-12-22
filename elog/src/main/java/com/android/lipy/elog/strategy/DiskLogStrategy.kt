@@ -1,4 +1,4 @@
-package com.android.lipy.elog
+package com.android.lipy.elog.strategy
 
 import android.os.Handler
 import android.os.Looper
@@ -15,7 +15,7 @@ import java.io.IOException
  *
  * Writes all logs to the disk with CSV format.
  */
-class DiskLogStrategy(handler: Handler) : LogStrategy {
+internal class DiskLogStrategy(handler: Handler) : LogStrategy {
 
     private val handler: Handler = checkNotNull(handler)
 
