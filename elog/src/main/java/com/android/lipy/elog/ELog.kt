@@ -52,6 +52,12 @@ import com.android.lipy.elog.interfaces.Printer
  * ELog.xml(XML_CONTENT);
  * </pre>
  *
+ * <h3>Byte and ByteArray to hex support (output will be in debug level)</h3>
+ * <pre>
+ * ELog.hex(Byte_CONTENT);
+ * ELog.hex(ByteArray_CONTENT);
+ * </pre>
+ *
  * <h3>Customize ELog</h3>
  * Based on your needs, you can change the following settings:
  *
@@ -99,7 +105,7 @@ object ELog {
     }
 
     fun d(message: String, vararg args: Any) {
-        printer.d(message, args)
+        printer.d(message, *args)
     }
 
     fun d(obj: Any) {
@@ -107,23 +113,23 @@ object ELog {
     }
 
     fun e(message: String, vararg args: Any) {
-        printer.e(null, message, args)
+        printer.e(null, message, *args)
     }
 
     fun e(throwable: Throwable, message: String, vararg args: Any) {
-        printer.e(throwable, message, args)
+        printer.e(throwable, message, *args)
     }
 
     fun i(message: String, vararg args: Any) {
-        printer.i(message, args)
+        printer.i(message, *args)
     }
 
     fun v(message: String, vararg args: Any) {
-        printer.v(message, args)
+        printer.v(message, *args)
     }
 
     fun w(message: String, vararg args: Any) {
-        printer.w(message, args)
+        printer.w(message, *args)
     }
 
     /**
@@ -131,7 +137,7 @@ object ELog {
      * ie: Unexpected errors etc
      */
     fun wtf(message: String, vararg args: Any) {
-        printer.wtf(message, args)
+        printer.wtf(message, *args)
     }
 
     /**

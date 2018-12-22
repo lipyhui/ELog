@@ -44,7 +44,7 @@ internal class LoggerPrinter : Printer {
     }
 
     override fun d(message: String, vararg args: Any) {
-        log(DEBUG, null, message, args)
+        log(DEBUG, null, message, *args)
     }
 
     override fun d(obj: Any) {
@@ -56,23 +56,23 @@ internal class LoggerPrinter : Printer {
     }
 
     override fun e(throwable: Throwable?, message: String, vararg args: Any) {
-        log(ERROR, throwable, message, args)
+        log(ERROR, throwable, message, *args)
     }
 
     override fun w(message: String, vararg args: Any) {
-        log(WARN, null, message, args)
+        log(WARN, null, message, *args)
     }
 
     override fun i(message: String, vararg args: Any) {
-        log(INFO, null, message, args)
+        log(INFO, null, message, *args)
     }
 
     override fun v(message: String, vararg args: Any) {
-        log(VERBOSE, null, message, args)
+        log(VERBOSE, null, message, *args)
     }
 
     override fun wtf(message: String, vararg args: Any) {
-        log(ASSERT, null, message, args)
+        log(ASSERT, null, message, *args)
     }
 
     override fun json(jsonStr: String?) {
@@ -200,6 +200,7 @@ internal class LoggerPrinter : Printer {
          * It is used for json pretty print
          */
         private const val JSON_INDENT = 2
+
         const val DEFAULT_TAG = "E_LOGGER"
     }
 }
