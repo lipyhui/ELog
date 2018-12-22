@@ -8,6 +8,7 @@ import android.util.Log.*
 import java.io.*
 import java.net.UnknownHostException
 import java.util.*
+import kotlin.experimental.and
 
 
 /**
@@ -86,39 +87,43 @@ internal object Utils {
     }
 
 
-    fun toString(`object`: Any?): String {
-        if (`object` == null) {
+    fun toString(obj: Any?): String {
+        if (obj == null) {
             return "null"
         }
-        if (!`object`.javaClass.isArray) {
-            return `object`.toString()
+        if (!obj.javaClass.isArray) {
+            return obj.toString()
         }
-        if (`object` is BooleanArray) {
-            return Arrays.toString(`object` as BooleanArray?)
+        if (obj is BooleanArray) {
+            return Arrays.toString(obj as BooleanArray?)
         }
-        if (`object` is ByteArray) {
-            return Arrays.toString(`object` as ByteArray?)
+        if (obj is ByteArray) {
+            return Arrays.toString(obj as ByteArray?)
         }
-        if (`object` is CharArray) {
-            return Arrays.toString(`object` as CharArray?)
+        if (obj is CharArray) {
+            return Arrays.toString(obj as CharArray?)
         }
-        if (`object` is ShortArray) {
-            return Arrays.toString(`object` as ShortArray?)
+        if (obj is ShortArray) {
+            return Arrays.toString(obj as ShortArray?)
         }
-        if (`object` is IntArray) {
-            return Arrays.toString(`object` as IntArray?)
+        if (obj is IntArray) {
+            return Arrays.toString(obj as IntArray?)
         }
-        if (`object` is LongArray) {
-            return Arrays.toString(`object` as LongArray?)
+        if (obj is LongArray) {
+            return Arrays.toString(obj as LongArray?)
         }
-        if (`object` is FloatArray) {
-            return Arrays.toString(`object` as FloatArray?)
+        if (obj is FloatArray) {
+            return Arrays.toString(obj as FloatArray?)
         }
-        if (`object` is DoubleArray) {
-            return Arrays.toString(`object` as DoubleArray?)
+        if (obj is DoubleArray) {
+            return Arrays.toString(obj as DoubleArray?)
         }
-        return if (`object` is Array<*>) {
-            Arrays.deepToString(`object` as Array<*>?)
+        return if (obj is Array<*>) {
+            Arrays.deepToString(obj as Array<*>?)
         } else "Couldn't find a correct type for the object"
+    }
+
+    fun byte2Hex(byte: Byte): String {
+        return "${((byte.toInt() shr 4) and 0x0F).toString(16)}${(byte and 0x0F).toString(16)} ".toUpperCase()
     }
 }// Hidden constructor.

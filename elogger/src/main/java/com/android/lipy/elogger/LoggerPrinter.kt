@@ -16,7 +16,6 @@ import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 
 internal class LoggerPrinter : Printer {
-
     /**
      * Provides one-time used tag for the log message
      */
@@ -76,7 +75,7 @@ internal class LoggerPrinter : Printer {
         log(ASSERT, null, message, args)
     }
 
-    override fun json(jsons: String) {
+    override fun json(jsons: String?) {
         var json = jsons
         if (json.isNullOrEmpty()) {
             d("Empty/Null json content")
@@ -100,10 +99,9 @@ internal class LoggerPrinter : Printer {
         } catch (e: JSONException) {
             e("Invalid Json")
         }
-
     }
 
-    override fun xml(xml: String) {
+    override fun xml(xml: String?) {
         if (xml.isNullOrEmpty()) {
             d("Empty/Null xml content")
             return
@@ -119,7 +117,31 @@ internal class LoggerPrinter : Printer {
         } catch (e: TransformerException) {
             e("Invalid xml")
         }
+    }
 
+    override fun hex(message: String?, byte: Byte) {
+        message?.let {
+            log(DEBUG, null, "$message ${Utils.byte2Hex(byte)}")
+            return
+        }
+
+        log(DEBUG, null, Utils.byte2Hex(byte))
+    }
+
+    override fun hex(message: String?, bytes: ByteArray) {
+        val strBuff = StringBuffer()
+        strBuff.append("[")
+        for (byte in bytes) {
+            strBuff.append(Utils.byte2Hex(byte))
+        }
+        strBuff.setCharAt(strBuff.length - 1, ']')
+
+        message?.let {
+            log(DEBUG, null, "$message $strBuff")
+            return
+        }
+
+        log(DEBUG, null, strBuff.toString())
     }
 
     @Synchronized

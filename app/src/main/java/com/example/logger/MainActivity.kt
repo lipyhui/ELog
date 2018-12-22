@@ -19,11 +19,16 @@ class MainActivity : AppCompatActivity() {
         Logger.addLogAdapter(AndroidLogAdapter())
         Logger.addLogAdapter(DiskLogAdapter())
 
-        Logger.d(byteArrayOf(0x14, 0x33, 0x02, 0x15, 0xf2.toByte(), 0x0e))
+        Logger.hex(0x08)
+        Logger.hex(0xE6.toByte())
+        Logger.hex(0xF0.toByte())
+        Logger.hex("type is", 0xF0.toByte())
+        Logger.hex(byteArrayOf(0x14, 0x33, 0x02, 0x15, 0xf2.toByte(), 0x0e))
+        Logger.hex("info is", byteArrayOf(0x14, 0x33, 0x02, 0x15, 0xf2.toByte(), 0x0e))
     }
 
     @SuppressLint("SetTextI18n")
-    fun test(){
+    fun test() {
         testTv?.text = "this is a test !!!!!!!!!"
     }
 }

@@ -29,12 +29,22 @@ interface Printer {
     /**
      * Formats the given json content and print it
      */
-    fun json(json: String)
+    fun json(json: String?)
 
     /**
      * Formats the given xml content and print it
      */
-    fun xml(xml: String)
+    fun xml(xml: String?)
+
+    /**
+     * byte to hex and print it
+     */
+    fun hex(message: String?, byte: Byte)
+
+    /**
+     * byte array to hex and print it
+     */
+    fun hex(message: String?, bytes: ByteArray)
 
     fun log(priority: Int, tag: String, message: String, throwable: Throwable?)
 

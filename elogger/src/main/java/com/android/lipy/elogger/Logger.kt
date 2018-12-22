@@ -135,15 +135,43 @@ object Logger {
     /**
      * Formats the given json content and print it
      */
-    fun json(json: String) {
+    fun json(json: String?) {
         printer.json(json)
     }
 
     /**
      * Formats the given xml content and print it
      */
-    fun xml(xml: String) {
+    fun xml(xml: String?) {
         printer.xml(xml)
+    }
+
+    /**
+     * byte to hex and print it
+     */
+    fun hex(byte: Byte) {
+        printer.hex(null, byte)
+    }
+
+    /**
+     * byte to hex and print it
+     */
+    fun hex(message: String, byte: Byte) {
+        printer.hex(message, byte)
+    }
+
+    /**
+     * byte array to hex and print it
+     */
+    fun hex(bytes: ByteArray) {
+        printer.hex(null, bytes)
+    }
+
+    /**
+     * byte array to hex and print it
+     */
+    fun hex(message: String, bytes: ByteArray) {
+        printer.hex(message, bytes)
     }
 
 }//no instance
