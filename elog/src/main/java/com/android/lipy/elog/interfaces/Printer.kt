@@ -39,12 +39,22 @@ interface Printer {
     /**
      * byte to hex and print it
      */
-    fun hex(message: String?, byte: Byte)
+    fun hex(byte: Byte?)
+
+    /**
+     * byte to hex and print it
+     */
+    fun hex(message: String?, byte: Byte?)
 
     /**
      * byte array to hex and print it
      */
-    fun hex(message: String?, bytes: ByteArray)
+    fun hex(bytes: ByteArray?)
+
+    /**
+     * byte array to hex and print it
+     */
+    fun hex(message: String?, bytes: ByteArray?)
 
     fun log(priority: Int, tag: String, msg: String?, throwable: Throwable?)
 

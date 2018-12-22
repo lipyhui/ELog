@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         ELog.addLogAdapter(AndroidLogAdapter())
         ELog.addLogAdapter(DiskLogAdapter())
 
-        ELog.hex(0x08)
+        ELog.t("TEST_TAG").hex(0x08)
         ELog.hex("bytes is", byteArrayOf(0x14, 0x33, 0x02, 0x15, 0xf2.toByte(), 0x0e))
         ELog.v("%d, %s, %6f : %3f", 1, "test", 5F, 10F)
 

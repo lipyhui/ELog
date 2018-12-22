@@ -56,6 +56,8 @@ import com.android.lipy.elog.interfaces.Printer
  * <pre>
  * ELog.hex(Byte_CONTENT);
  * ELog.hex(ByteArray_CONTENT);
+ * ELog.hex(STRING_CONTENT, Byte_CONTENT);
+ * ELog.hex(STRING_CONTENT, ByteArray_CONTENT);
  * </pre>
  *
  * <h3>Customize ELog</h3>

@@ -119,22 +119,62 @@ internal class LoggerPrinter : Printer {
         }
     }
 
-    override fun hex(message: String?, byte: Byte) {
-        message?.let {
-            log(DEBUG, null, "$message ${Utils.byte2Hex(byte).toUpperCase()}")
+    override fun hex(byte: Byte?) {
+        if (byte == null) {
+            d("Null Byte")
+        } else {
+            log(DEBUG, null, Utils.byte2Hex(byte).toUpperCase())
+        }
+    }
+
+    override fun hex(message: String?, byte: Byte?) {
+        when {
+            message.isNullOrEmpty() && byte == null -> {
+                d("Null byte")
+            }
+
+            byte == null -> {
+                d("$message Null byte content")
+            }
+
+            else -> {
+                message?.let {
+                    log(DEBUG, null, "$message ${Utils.byte2Hex(byte).toUpperCase()}")
+                    return
+                }
+
+                log(DEBUG, null, Utils.byte2Hex(byte).toUpperCase())
+            }
+        }
+    }
+
+    override fun hex(bytes: ByteArray?) {
+        bytes?.let {
+            val strBuff = StringBuffer()
+            strBuff.append("[")
+            for (byte in bytes) {
+                strBuff.append(Utils.byte2Hex(byte))
+            }
+            strBuff.setCharAt(strBuff.length - 1, ']')
+
+            log(DEBUG, null, strBuff.toString().toUpperCase())
             return
         }
 
-        log(DEBUG, null, Utils.byte2Hex(byte).toUpperCase())
+        d("Null ByteArray")
     }
 
-    override fun hex(message: String?, bytes: ByteArray) {
+    override fun hex(message: String?, bytes: ByteArray?) {
         val strBuff = StringBuffer()
-        strBuff.append("[")
-        for (byte in bytes) {
-            strBuff.append(Utils.byte2Hex(byte))
+        if (bytes == null) {
+            strBuff.append("Null ByteArray")
+        } else {
+            strBuff.append("[")
+            for (byte in bytes) {
+                strBuff.append(Utils.byte2Hex(byte))
+            }
+            strBuff.setCharAt(strBuff.length - 1, ']')
         }
-        strBuff.setCharAt(strBuff.length - 1, ']')
 
         message?.let {
             log(DEBUG, null, "$message ${strBuff.toString().toUpperCase()}")
