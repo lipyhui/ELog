@@ -121,11 +121,11 @@ internal class LoggerPrinter : Printer {
 
     override fun hex(message: String?, byte: Byte) {
         message?.let {
-            log(DEBUG, null, "$message ${Utils.byte2Hex(byte)}")
+            log(DEBUG, null, "$message ${Utils.byte2Hex(byte).toUpperCase()}")
             return
         }
 
-        log(DEBUG, null, Utils.byte2Hex(byte))
+        log(DEBUG, null, Utils.byte2Hex(byte).toUpperCase())
     }
 
     override fun hex(message: String?, bytes: ByteArray) {
@@ -137,11 +137,11 @@ internal class LoggerPrinter : Printer {
         strBuff.setCharAt(strBuff.length - 1, ']')
 
         message?.let {
-            log(DEBUG, null, "$message $strBuff")
+            log(DEBUG, null, "$message ${strBuff.toString().toUpperCase()}")
             return
         }
 
-        log(DEBUG, null, strBuff.toString())
+        log(DEBUG, null, strBuff.toString().toUpperCase())
     }
 
     @Synchronized

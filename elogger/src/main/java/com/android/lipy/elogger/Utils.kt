@@ -124,6 +124,6 @@ internal object Utils {
     }
 
     fun byte2Hex(byte: Byte): String {
-        return "${((byte.toInt() shr 4) and 0x0F).toString(16)}${(byte and 0x0F).toString(16)} ".toUpperCase()
+        return "${((byte.toInt() shr 4) and 0x0F).toString(16)}${(byte and 0x0F).toString(16)} "
     }
 }// Hidden constructor.
