@@ -120,7 +120,7 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
             }
             if (logStrategy == null) {
                 val diskPath = Environment.getExternalStorageDirectory().absolutePath
-                val folder = diskPath + File.separatorChar + "eLog"
+                val folder = diskPath + File.separatorChar + "ELog"
 
                 val ht = HandlerThread("AndroidFileELog.$folder")
                 ht.start()
