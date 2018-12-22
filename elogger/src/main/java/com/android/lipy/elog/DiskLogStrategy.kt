@@ -1,9 +1,9 @@
-package com.android.lipy.elogger
+package com.android.lipy.elog
 
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import com.android.lipy.elogger.interfaces.LogStrategy
+import com.android.lipy.elog.interfaces.LogStrategy
 
 import java.io.File
 import java.io.FileWriter
@@ -19,11 +19,11 @@ class DiskLogStrategy(handler: Handler) : LogStrategy {
 
     private val handler: Handler = checkNotNull(handler)
 
-    override fun log(level: Int, tag: String?, message: String) {
+    override fun log(priority: Int, tag: String?, message: String) {
         checkNotNull(message)
 
         // do nothing on the calling thread, simply pass the tag/msg to the background thread
-        handler.sendMessage(handler.obtainMessage(level, message))
+        handler.sendMessage(handler.obtainMessage(priority, message))
     }
 
     internal class WriteHandler(looper: Looper, folder: String, private val maxFileSize: Int) : Handler(checkNotNull(looper)) {

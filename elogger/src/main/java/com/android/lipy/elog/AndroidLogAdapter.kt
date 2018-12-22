@@ -1,7 +1,7 @@
-package com.android.lipy.elogger
+package com.android.lipy.elog
 
-import com.android.lipy.elogger.interfaces.FormatStrategy
-import com.android.lipy.elogger.interfaces.LogAdapter
+import com.android.lipy.elog.interfaces.FormatStrategy
+import com.android.lipy.elog.interfaces.LogAdapter
 
 /**
  * Android terminal log output implementation for [LogAdapter].

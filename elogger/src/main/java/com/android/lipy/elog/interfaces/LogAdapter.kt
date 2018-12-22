@@ -1,10 +1,10 @@
-package com.android.lipy.elogger.interfaces
+package com.android.lipy.elog.interfaces
 
-import com.android.lipy.elogger.AndroidLogAdapter
-import com.android.lipy.elogger.DiskLogAdapter
+import com.android.lipy.elog.AndroidLogAdapter
+import com.android.lipy.elog.DiskLogAdapter
 
 /**
- * Provides a common interface to emits logs through. This is a required contract for Logger.
+ * Provides a common interface to emits logs through. This is a required contract for ELog.
  *
  * @see AndroidLogAdapter
  *

@@ -1,8 +1,8 @@
-package com.android.lipy.elogger
+package com.android.lipy.elog
 
 import android.util.Log.*
-import com.android.lipy.elogger.interfaces.LogAdapter
-import com.android.lipy.elogger.interfaces.Printer
+import com.android.lipy.elog.interfaces.LogAdapter
+import com.android.lipy.elog.interfaces.Printer
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -33,10 +33,10 @@ internal class LoggerPrinter : Printer {
                 localTag.remove()
                 return tag
             }
-            return TAG
+            return DEFAULT_TAG
         }
 
-    override fun t(tag: String): Printer {
+    override fun t(tag: String?): Printer {
         if (tag != null) {
             localTag.set(tag)
         }
@@ -47,8 +47,8 @@ internal class LoggerPrinter : Printer {
         log(DEBUG, null, message, args)
     }
 
-    override fun d(`object`: Any) {
-        log(DEBUG, null, Utils.toString(`object`))
+    override fun d(obj: Any) {
+        log(DEBUG, null, Utils.toString(obj))
     }
 
     override fun e(message: String, vararg args: Any) {
@@ -75,8 +75,8 @@ internal class LoggerPrinter : Printer {
         log(ASSERT, null, message, args)
     }
 
-    override fun json(jsons: String?) {
-        var json = jsons
+    override fun json(jsonStr: String?) {
+        var json = jsonStr
         if (json.isNullOrEmpty()) {
             d("Empty/Null json content")
             return
@@ -101,13 +101,13 @@ internal class LoggerPrinter : Printer {
         }
     }
 
-    override fun xml(xml: String?) {
-        if (xml.isNullOrEmpty()) {
+    override fun xml(xmlStr: String?) {
+        if (xmlStr.isNullOrEmpty()) {
             d("Empty/Null xml content")
             return
         }
         try {
-            val xmlInput = StreamSource(StringReader(xml))
+            val xmlInput = StreamSource(StringReader(xmlStr))
             val xmlOutput = StreamResult(StringWriter())
             val transformer = TransformerFactory.newInstance().newTransformer()
             transformer.setOutputProperty(OutputKeys.INDENT, "yes")
@@ -147,9 +147,9 @@ internal class LoggerPrinter : Printer {
     @Synchronized
     override fun log(priority: Int,
                      tag: String,
-                     messages: String,
+                     msg: String?,
                      throwable: Throwable?) {
-        var message = messages
+        var message = msg
         if (throwable != null && message != null) {
             message += " : " + Utils.getStackTraceString(throwable)
         }
@@ -200,6 +200,6 @@ internal class LoggerPrinter : Printer {
          * It is used for json pretty print
          */
         private const val JSON_INDENT = 2
-        private const val TAG = "E_LOGGER"
+        const val DEFAULT_TAG = "E_LOGGER"
     }
 }

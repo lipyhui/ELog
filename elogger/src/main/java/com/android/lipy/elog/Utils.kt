@@ -1,7 +1,5 @@
-package com.android.lipy.elogger
+package com.android.lipy.elog
 
-import android.app.ActivityManager
-import android.content.Context
 import android.os.Process
 import android.util.Log
 import android.util.Log.*
@@ -74,18 +72,6 @@ internal object Utils {
             "null".trim()
         }
     }
-
-    fun getAppNameByPID(context: Context, pid: Int): String {
-        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-
-        for (processInfo in manager.runningAppProcesses) {
-            if (processInfo.pid == pid) {
-                return processInfo.processName
-            }
-        }
-        return ""
-    }
-
 
     fun toString(obj: Any?): String {
         if (obj == null) {

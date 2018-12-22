@@ -1,7 +1,7 @@
-package com.android.lipy.elogger.interfaces
+package com.android.lipy.elog.interfaces
 
-import com.android.lipy.elogger.DiskLogStrategy
-import com.android.lipy.elogger.LogcatLogStrategy
+import com.android.lipy.elog.DiskLogStrategy
+import com.android.lipy.elog.LogcatLogStrategy
 
 /**
  * Determines destination target for the logs such as Disk, Logcat etc.
@@ -13,7 +13,7 @@ import com.android.lipy.elogger.LogcatLogStrategy
 interface LogStrategy {
 
     /**
-     * This is invoked by Logger each time a log message is processed.
+     * This is invoked by ELog each time a log message is processed.
      * Interpret this method as last destination of the log in whole pipeline.
      *
      * @param priority is the log level e.g. DEBUG, WARNING

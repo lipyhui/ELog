@@ -1,7 +1,9 @@
-package com.android.lipy.elogger
+package com.android.lipy.elog
 
-import com.android.lipy.elogger.interfaces.LogAdapter
-import com.android.lipy.elogger.interfaces.Printer
+import com.android.lipy.elog.interfaces.FormatStrategy
+import com.android.lipy.elog.interfaces.LogAdapter
+import com.android.lipy.elog.interfaces.LogStrategy
+import com.android.lipy.elog.interfaces.Printer
 
 /**
  * <pre>
@@ -17,40 +19,40 @@ import com.android.lipy.elogger.interfaces.Printer
  * <h3>How to use it</h3>
  * Initialize it first
  * <pre>
- * Logger.addLogAdapter(new AndroidLogAdapter());
+ * ELog.addLogAdapter(new AndroidLogAdapter());
  * </pre>
  *
- * And use the appropriate static Logger methods.
+ * And use the appropriate static ELog methods.
  *
  * <pre>
- * Logger.d("debug");
- * Logger.e("error");
- * Logger.w("warning");
- * Logger.v("verbose");
- * Logger.i("information");
- * Logger.wtf("What a Terrible Failure");
+ * ELog.d("debug");
+ * ELog.e("error");
+ * ELog.w("warning");
+ * ELog.v("verbose");
+ * ELog.i("information");
+ * ELog.wtf("What a Terrible Failure");
  * </pre>
  *
  * <h3>String format arguments are supported</h3>
  * <pre>
- * Logger.d("hello %s", "world");
+ * ELog.d("hello %s", "world");
  * </pre>
  *
  * <h3>Collections are support ed(only available for debug logs)</h3>
  * <pre>
- * Logger.d(MAP);
- * Logger.d(SET);
- * Logger.d(LIST);
- * Logger.d(ARRAY);
+ * ELog.d(MAP);
+ * ELog.d(SET);
+ * ELog.d(LIST);
+ * ELog.d(ARRAY);
  * </pre>
  *
  * <h3>Json and Xml support (output will be in debug level)</h3>
  * <pre>
- * Logger.json(JSON_CONTENT);
- * Logger.xml(XML_CONTENT);
+ * ELog.json(JSON_CONTENT);
+ * ELog.xml(XML_CONTENT);
  * </pre>
  *
- * <h3>Customize Logger</h3>
+ * <h3>Customize ELog</h3>
  * Based on your needs, you can change the following settings:
  *
  * Different [LogAdapter]
@@ -64,12 +66,12 @@ import com.android.lipy.elogger.interfaces.Printer
  *
  * @see LogStrategy
  */
-object Logger {
+object ELog {
 
     private var printer: Printer = LoggerPrinter()
 
     fun printer(printer: Printer) {
-        Logger.printer = checkNotNull(printer)
+        ELog.printer = checkNotNull(printer)
     }
 
     fun addLogAdapter(adapter: LogAdapter) {
@@ -100,8 +102,8 @@ object Logger {
         printer.d(message, args)
     }
 
-    fun d(`object`: Any) {
-        printer.d(`object`)
+    fun d(obj: Any) {
+        printer.d(obj)
     }
 
     fun e(message: String, vararg args: Any) {

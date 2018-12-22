@@ -1,4 +1,4 @@
-package com.android.lipy.elogger.interfaces
+package com.android.lipy.elog.interfaces
 
 /**
  * A proxy interface to enable additional operations.
@@ -8,11 +8,11 @@ interface Printer {
 
     fun addAdapter(adapter: LogAdapter)
 
-    fun t(tag: String): Printer
+    fun t(tag: String?): Printer
 
     fun d(message: String, vararg args: Any)
 
-    fun d(`object`: Any)
+    fun d(obj: Any)
 
     fun e(message: String, vararg args: Any)
 
@@ -29,12 +29,12 @@ interface Printer {
     /**
      * Formats the given json content and print it
      */
-    fun json(json: String?)
+    fun json(jsonStr: String?)
 
     /**
      * Formats the given xml content and print it
      */
-    fun xml(xml: String?)
+    fun xml(xmlStr: String?)
 
     /**
      * byte to hex and print it
@@ -46,7 +46,7 @@ interface Printer {
      */
     fun hex(message: String?, bytes: ByteArray)
 
-    fun log(priority: Int, tag: String, message: String, throwable: Throwable?)
+    fun log(priority: Int, tag: String, msg: String?, throwable: Throwable?)
 
     fun clearLogAdapters()
 }

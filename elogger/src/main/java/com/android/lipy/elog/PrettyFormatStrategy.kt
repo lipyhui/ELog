@@ -1,7 +1,8 @@
-package com.android.lipy.elogger
+package com.android.lipy.elog
 
-import com.android.lipy.elogger.interfaces.FormatStrategy
-import com.android.lipy.elogger.interfaces.LogStrategy
+import com.android.lipy.elog.LoggerPrinter.Companion.DEFAULT_TAG
+import com.android.lipy.elog.interfaces.FormatStrategy
+import com.android.lipy.elog.interfaces.LogStrategy
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 /**
@@ -29,7 +30,7 @@ import com.android.lipy.elogger.interfaces.LogStrategy
  * .methodCount(0)         // (Optional) How many method line to show. Default 2
  * .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
  * .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
- * .tag("My custom tag")   // (Optional) Global tag for every log. Default E_LOGGER
+ * .tag("My custom tag")   // (Optional) Global tag for every log. Default [DEFAULT_TAG]
  * .build();
  * </pre>
  */
@@ -51,8 +52,8 @@ class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrateg
         tag = builder.tag
     }
 
-    override fun log(priority: Int, onceOnlyTag: String?, message: String) {
-        checkNotNull(message)
+    override fun log(priority: Int, onceOnlyTag: String?, msg: String) {
+        checkNotNull(msg)
 
         val tag = formatTag(onceOnlyTag)
 
@@ -60,13 +61,13 @@ class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrateg
         logHeaderContent(priority, tag, methodCount)
 
         //get bytes of message with system's default charset (which is UTF-8 for Android)
-        val bytes = message.toByteArray()
+        val bytes = msg.toByteArray()
         val length = bytes.size
         if (length <= CHUNK_SIZE) {
             if (methodCount > 0) {
                 logDivider(priority, tag)
             }
-            logContent(priority, tag, message)
+            logContent(priority, tag, msg)
             logBottomBorder(priority, tag)
             return
         }
@@ -113,7 +114,7 @@ class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrateg
                     .append(' ')
                     .append(level)
                     .append(getSimpleClassName(trace[stackIndex].className))
-                    .append(".")
+                    .append("")
                     .append(trace[stackIndex].methodName)
                     .append(" ")
                     .append(" (")
@@ -152,7 +153,7 @@ class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrateg
     private fun getSimpleClassName(name: String): String {
         checkNotNull(name)
 
-        val lastIndex = name.lastIndexOf(".")
+        val lastIndex = name.lastIndexOf("")
         return name.substring(lastIndex + 1)
     }
 
@@ -169,7 +170,7 @@ class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrateg
         while (i < trace.size) {
             val e = trace[i]
             val name = e.className
-            if (name != LoggerPrinter::class.java.name && name != Logger::class.java.name) {
+            if (name != LoggerPrinter::class.java.name && name != ELog::class.java.name) {
                 return --i
             }
             i++
@@ -188,7 +189,7 @@ class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrateg
         internal var methodOffset = 0
         internal var showThreadInfo = true
         internal var logStrategy: LogStrategy? = null
-        internal var tag: String? = "E_LOGGER"
+        internal var tag: String? = DEFAULT_TAG
 
         fun methodCount(`val`: Int): Builder {
             methodCount = `val`

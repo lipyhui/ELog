@@ -1,9 +1,10 @@
-package com.android.lipy.elogger
+package com.android.lipy.elog
 
 import android.os.Environment
 import android.os.HandlerThread
-import com.android.lipy.elogger.interfaces.FormatStrategy
-import com.android.lipy.elogger.interfaces.LogStrategy
+import com.android.lipy.elog.LoggerPrinter.Companion.DEFAULT_TAG
+import com.android.lipy.elog.interfaces.FormatStrategy
+import com.android.lipy.elog.interfaces.LogStrategy
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -87,7 +88,7 @@ class CsvFormatStrategy private constructor(builder: Builder) : FormatStrategy {
         internal var date: Date? = null
         internal var dateFormat: SimpleDateFormat? = null
         internal var logStrategy: LogStrategy? = null
-        internal var tag: String? = "E_LOGGER"
+        internal var tag: String? = DEFAULT_TAG
 
         fun date(`val`: Date?): Builder {
             date = `val`
@@ -118,9 +119,9 @@ class CsvFormatStrategy private constructor(builder: Builder) : FormatStrategy {
             }
             if (logStrategy == null) {
                 val diskPath = Environment.getExternalStorageDirectory().absolutePath
-                val folder = diskPath + File.separatorChar + "eLogger"
+                val folder = diskPath + File.separatorChar + "eLog"
 
-                val ht = HandlerThread("AndroidFileELogger.$folder")
+                val ht = HandlerThread("AndroidFileELog.$folder")
                 ht.start()
                 val handler = DiskLogStrategy.WriteHandler(ht.looper, folder, MAX_BYTES)
                 logStrategy = DiskLogStrategy(handler)
