@@ -193,23 +193,23 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
         internal var logStrategy: LogStrategy? = null
         internal var tag: String? = DEFAULT_TAG
 
-        fun methodCount(`val`: Int): Builder {
-            methodCount = `val`
+        fun methodCount(value: Int): Builder {
+            methodCount = value
             return this
         }
 
-        fun methodOffset(`val`: Int): Builder {
-            methodOffset = `val`
+        fun methodOffset(value: Int): Builder {
+            methodOffset = value
             return this
         }
 
-        fun showThreadInfo(`val`: Boolean): Builder {
-            showThreadInfo = `val`
+        fun showThreadInfo(value: Boolean): Builder {
+            showThreadInfo = value
             return this
         }
 
-        fun logStrategy(`val`: LogStrategy?): Builder {
-            logStrategy = `val`
+        fun logStrategy(value: LogStrategy?): Builder {
+            logStrategy = value
             return this
         }
 

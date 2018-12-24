@@ -79,9 +79,13 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
     }
 
     private fun formatTag(tag: String?): String? {
-        return if (!tag.isNullOrEmpty() && !this.tag.equals(tag)) {
-            this.tag + "-" + tag
+        val commonTag = if (this.tag.isNullOrEmpty()) {
+            DEFAULT_TAG
         } else this.tag
+
+        return if (!tag.isNullOrEmpty() && !commonTag.equals(tag)) {
+            "$commonTag-$tag"
+        } else commonTag
     }
 
     class Builder internal constructor() {
@@ -91,18 +95,18 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
         internal var logStrategy: LogStrategy? = null
         internal var tag: String? = DEFAULT_TAG
 
-        fun date(`val`: Date?): Builder {
-            date = `val`
+        fun date(value: Date?): Builder {
+            date = value
             return this
         }
 
-        fun dateFormat(`val`: SimpleDateFormat?): Builder {
-            dateFormat = `val`
+        fun dateFormat(value: SimpleDateFormat?): Builder {
+            dateFormat = value
             return this
         }
 
-        fun logStrategy(`val`: LogStrategy?): Builder {
-            logStrategy = `val`
+        fun logStrategy(value: LogStrategy?): Builder {
+            logStrategy = value
             return this
         }
 
