@@ -1,6 +1,7 @@
 package com.android.lipy.elog
 
 import android.app.Application
+import android.os.Environment
 import com.android.lipy.elog.adapter.AndroidLogAdapter
 import com.android.lipy.elog.adapter.DiskLogAdapter
 import com.android.lipy.elog.interfaces.LogAdapter
@@ -87,6 +88,7 @@ class ELogConfigs private constructor(builder: Builder) {
                     .date(builder.mDiskDate)
                     .dateFormat(builder.mDiskDateFormat)
                     .logStrategy(builder.mDiskLogStrategy)
+                    .diskPath(builder.mDiskPath)
                     .build()
 
             //default disk adapter
@@ -132,6 +134,7 @@ class ELogConfigs private constructor(builder: Builder) {
         internal var mDiskDate: Date? = null
         internal var mDiskDateFormat: SimpleDateFormat? = null
         internal var mDiskLogStrategy: LogStrategy? = null
+        internal var mDiskPath: String? = null
 
         fun setTag(tag: String?): Builder {
             mTag = tag
@@ -209,6 +212,11 @@ class ELogConfigs private constructor(builder: Builder) {
             return this
         }
 
+        fun setDiskPath(diskPath: String?): Builder {
+            mDiskPath = diskPath
+            return this
+        }
+
         fun build(): ELogConfigs {
             if (mTag.isNullOrEmpty()) {
                 mTag = DEFAULT_TAG
@@ -228,6 +236,10 @@ class ELogConfigs private constructor(builder: Builder) {
 
             if (mLogcatMethodOffset < 0) {
                 mLogcatMethodOffset = DEFAULT_METHOD_OFFSET
+            }
+
+            if (mDiskPath.isNullOrEmpty()) {
+                mDiskPath = Environment.getExternalStorageDirectory().absolutePath
             }
 
             return ELogConfigs(this)

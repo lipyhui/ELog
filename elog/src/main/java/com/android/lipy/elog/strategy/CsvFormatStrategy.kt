@@ -92,10 +92,16 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
 
     class Builder internal constructor() {
 
+        internal var tag: String? = DEFAULT_TAG
         internal var date: Date? = null
         internal var dateFormat: SimpleDateFormat? = null
         internal var logStrategy: LogStrategy? = null
-        internal var tag: String? = DEFAULT_TAG
+        private var diskPath: String? = null
+
+        fun tag(tag: String?): Builder {
+            this.tag = tag
+            return this
+        }
 
         fun date(value: Date?): Builder {
             date = value
@@ -112,8 +118,8 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
             return this
         }
 
-        fun tag(tag: String?): Builder {
-            this.tag = tag
+        fun diskPath(value: String?): Builder {
+            diskPath = value
             return this
         }
 
@@ -125,7 +131,9 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
                 dateFormat = SimpleDateFormat(DEFAULT_DATA_FORMAT, Locale.UK)
             }
             if (logStrategy == null) {
-                val diskPath = Environment.getExternalStorageDirectory().absolutePath
+                if (diskPath.isNullOrEmpty()) {
+                    diskPath = Environment.getExternalStorageDirectory().absolutePath
+                }
                 val folder = diskPath + File.separatorChar + DEFAULT_DIR
 
                 val ht = HandlerThread("AndroidFileELog.$folder")
