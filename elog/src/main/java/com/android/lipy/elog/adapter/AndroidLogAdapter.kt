@@ -1,8 +1,10 @@
 package com.android.lipy.elog.adapter
 
-import com.android.lipy.elog.strategy.PrettyFormatStrategy
+import android.util.Log.VERBOSE
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DEBUG_PRIORITY
 import com.android.lipy.elog.interfaces.FormatStrategy
 import com.android.lipy.elog.interfaces.LogAdapter
+import com.android.lipy.elog.strategy.PrettyFormatStrategy
 
 /**
  * Android terminal log output implementation for [LogAdapter].
@@ -19,22 +21,32 @@ import com.android.lipy.elog.interfaces.LogAdapter
  */
 internal class AndroidLogAdapter : LogAdapter {
 
-    private val formatStrategy: FormatStrategy
+    private val mFormatStrategy: FormatStrategy
+    private var mPriority: Int = DEFAULT_DEBUG_PRIORITY
 
     constructor() {
-        this.formatStrategy = PrettyFormatStrategy.Builder().build()
+        mFormatStrategy = PrettyFormatStrategy.Builder().build()
     }
 
     constructor(formatStrategy: FormatStrategy) {
-        this.formatStrategy = checkNotNull(formatStrategy)
+        mFormatStrategy = checkNotNull(formatStrategy)
+    }
+
+    constructor(formatStrategy: FormatStrategy, priority: Int) {
+        mFormatStrategy = checkNotNull(formatStrategy)
+        mPriority = if (priority < VERBOSE) {
+            VERBOSE
+        } else {
+            priority
+        }
     }
 
     override fun isLoggable(priority: Int, tag: String?): Boolean {
-        return true
+        return priority >= mPriority
     }
 
     override fun log(priority: Int, tag: String?, message: String) {
-        formatStrategy.log(priority, tag, message)
+        mFormatStrategy.log(priority, tag, message)
     }
 
 }

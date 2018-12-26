@@ -1,7 +1,6 @@
 package com.android.lipy.elog
 
 import android.util.Log.*
-import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
 import com.android.lipy.elog.interfaces.LogAdapter
 import com.android.lipy.elog.interfaces.Printer
 import org.json.JSONArray
@@ -9,13 +8,11 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.StringReader
 import java.io.StringWriter
-import java.util.*
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerException
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
-import kotlin.collections.ArrayList
 
 internal class ELogPrinter : Printer {
     /**

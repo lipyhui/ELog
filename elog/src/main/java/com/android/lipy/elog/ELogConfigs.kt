@@ -2,6 +2,8 @@ package com.android.lipy.elog
 
 import android.app.Application
 import android.os.Environment
+import android.util.Log
+import android.util.Log.VERBOSE
 import com.android.lipy.elog.adapter.AndroidLogAdapter
 import com.android.lipy.elog.adapter.DiskLogAdapter
 import com.android.lipy.elog.interfaces.LogAdapter
@@ -40,6 +42,7 @@ import kotlin.collections.ArrayList
  *  .setDiskDate(Date(2018, 1, 1, 24, 58))                  //Set diskTag. Default current system time
  *  .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //Set diskTag. Default [DEFAULT_DATA_FORMAT]
  *  .setDiskLogStrategy(CustomLogStrategy)                  //Setting up custom LogStrategy. Default [DiskLogStrategy]
+ *  .setDiskPath(CustomDiskPath)                            //Setting up custom disk path, example "CustomDiskPath/ELog/logs_*.csv". Default "ExternalStorageDirectory/ELog/logs_*.csv"
  *  .build()
  *
  *  //init
@@ -78,7 +81,7 @@ class ELogConfigs private constructor(builder: Builder) {
                     .build()
 
             //default logcat adapter
-            mLogAdapters.add(AndroidLogAdapter(logcatFormatStrategy))
+            mLogAdapters.add(AndroidLogAdapter(logcatFormatStrategy, builder.mLogcatDebugPriority))
         }
 
         //default disk log
@@ -92,7 +95,7 @@ class ELogConfigs private constructor(builder: Builder) {
                     .build()
 
             //default disk adapter
-            mLogAdapters.add(DiskLogAdapter(diskFormatStrategy))
+            mLogAdapters.add(DiskLogAdapter(diskFormatStrategy, builder.mDiskDebugPriority))
         }
 
         //adapters
@@ -124,6 +127,7 @@ class ELogConfigs private constructor(builder: Builder) {
 
         //logcat configs
         internal var mLogcatTag: String? = null
+        internal var mLogcatDebugPriority = DEFAULT_DEBUG_PRIORITY
         internal var mLogcatMethodCount = DEFAULT_METHOD_COUNT
         internal var mLogcatMethodOffset = DEFAULT_METHOD_OFFSET
         internal var mLogcatShowThreadInfo = DEFAULT_IS_SHOW_THREAD_INFO
@@ -131,6 +135,7 @@ class ELogConfigs private constructor(builder: Builder) {
 
         //disk configs
         internal var mDiskTag: String? = null
+        internal var mDiskDebugPriority = DEFAULT_DEBUG_PRIORITY
         internal var mDiskDate: Date? = null
         internal var mDiskDateFormat: SimpleDateFormat? = null
         internal var mDiskLogStrategy: LogStrategy? = null
@@ -169,6 +174,11 @@ class ELogConfigs private constructor(builder: Builder) {
             return this
         }
 
+        fun setLogcatDebugPriority(priority: Int): Builder {
+            mLogcatDebugPriority = priority
+            return this
+        }
+
         fun setLogcatMethodCount(logcatMethodCount: Int): Builder {
             mLogcatMethodCount = logcatMethodCount
             return this
@@ -194,6 +204,11 @@ class ELogConfigs private constructor(builder: Builder) {
          ***************************************************************/
         fun setDiskTag(diskTag: String?): Builder {
             mDiskTag = diskTag
+            return this
+        }
+
+        fun setDiskDebugPriority(priority: Int): Builder {
+            mDiskDebugPriority = priority
             return this
         }
 
@@ -230,6 +245,14 @@ class ELogConfigs private constructor(builder: Builder) {
                 mDiskTag = mTag
             }
 
+            if (mLogcatDebugPriority < VERBOSE) {
+                mLogcatDebugPriority = VERBOSE
+            }
+
+            if (mDiskDebugPriority < VERBOSE) {
+                mDiskDebugPriority = VERBOSE
+            }
+
             if (mLogcatMethodCount < 0) {
                 mLogcatMethodCount = DEFAULT_METHOD_COUNT
             }
@@ -247,19 +270,25 @@ class ELogConfigs private constructor(builder: Builder) {
     }
 
     companion object {
-        const val DEFAULT_TAG = "ELOG"
+        internal const val DEFAULT_TAG = "ELOG"
+
+        //debug priority
+        internal const val DEFAULT_DEBUG_PRIORITY = VERBOSE
 
         //log switch
-        const val DEFAULT_ENABLE_LOGCAT = true
-        const val DEFAULT_ENABLE_DISK_LOG = false
+        internal const val DEFAULT_ENABLE_LOGCAT = true
+        internal const val DEFAULT_ENABLE_DISK_LOG = false
 
         //logcat
-        const val DEFAULT_METHOD_COUNT = 2
-        const val DEFAULT_METHOD_OFFSET = 0
-        const val DEFAULT_IS_SHOW_THREAD_INFO = true
+        internal const val DEFAULT_METHOD_COUNT = 2
+        internal const val DEFAULT_METHOD_OFFSET = 0
+        internal const val DEFAULT_IS_SHOW_THREAD_INFO = true
 
         //disk
-        const val DEFAULT_DATA_FORMAT = "yyyy.MM.dd HH:mm:ss.SSS"
-        const val DEFAULT_DIR = "ELog"
+        internal const val DEFAULT_DATA_FORMAT = "yyyy.MM.dd HH:mm:ss.SSS"
+        internal const val DEFAULT_DIR = "ELog"
+
+        //stop debug log
+        const val DEBUG_STOP = Int.MAX_VALUE
     }
 }

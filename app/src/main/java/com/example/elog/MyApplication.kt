@@ -1,6 +1,7 @@
 package com.example.elog
 
 import android.app.Application
+import android.util.Log
 import com.android.lipy.elog.ELog
 import com.android.lipy.elog.ELogConfigs
 import java.text.SimpleDateFormat
@@ -19,6 +20,8 @@ class MyApplication : Application() {
                 .setLogcatTag("TestLogcatTagA")
                 .setLogcatMethodCount(7)
                 .setDiskDateFormat(SimpleDateFormat("yyyy.MM.dd HH:mm"))
+                .setLogcatDebugPriority(Log.VERBOSE)
+                .setDiskDebugPriority(ELogConfigs.DEBUG_STOP)
                 .build()
         ELog.init(configs)
     }

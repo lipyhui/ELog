@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.Environment
 import android.os.IBinder
+import android.util.Log
 import com.android.lipy.elog.ELog
 import com.android.lipy.elog.ELogConfigs
 import java.io.File
@@ -22,10 +23,13 @@ class MyService : Service() {
                 .setLogcatMethodCount(7)
                 .setLogcatShowThreadInfo(false)
                 .setDiskPath(Environment.getExternalStorageDirectory().absolutePath + File.separatorChar + "service")
+                .setLogcatDebugPriority(Log.WARN)
+                .setDiskDebugPriority(Log.DEBUG)
                 .build()
         ELog.init(configs)
 
-        ELog.e("info %s", "this is a test format string!")
+        ELog.d("service info %s", "this is a debug format string!")
+        ELog.e("service info %s", "this is a err format string!")
 
         return super.onStartCommand(intent, flags, startId)
     }
