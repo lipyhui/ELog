@@ -88,8 +88,10 @@ object ELog {
      * @param configs Detailed configuration see [ELogConfigs]
      */
     fun init(configs: ELogConfigs) {
-        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
-            printer = configs.mPrinter
+        printer = configs.mPrinter
+
+        if (configs.mPrinter.getAdaptersSize() <= 0) {
+            printer?.addAdapter(AndroidLogAdapter())
         }
     }
 

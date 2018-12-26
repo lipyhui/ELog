@@ -19,6 +19,11 @@ class MainActivity : AppCompatActivity() {
         ELog.v("%d, %s, %6f : %3f", 1, "test", 5F, 10F)
 
         startService(Intent(this, MyService::class.java))
+
+        Thread(Runnable {
+            Thread.sleep(5000)
+            ELog.t("TEST_TAG2").e("this is a thread test !!!")
+        }).start()
     }
 
     @SuppressLint("SetTextI18n")

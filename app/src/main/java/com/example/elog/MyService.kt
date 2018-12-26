@@ -2,9 +2,11 @@ package com.example.elog
 
 import android.app.Service
 import android.content.Intent
+import android.os.Environment
 import android.os.IBinder
 import com.android.lipy.elog.ELog
 import com.android.lipy.elog.ELogConfigs
+import java.io.File
 
 class MyService : Service() {
 
@@ -15,12 +17,14 @@ class MyService : Service() {
                 .setTag("MyTestConfigs")
                 .enableLogcat()
                 .enableDiskLog()
-                .setDiskTag("TestDiskTag")
-                .setLogcatTag("TestLogcatTag")
+                .setDiskTag("TestDiskTagS")
+                .setLogcatTag("TestLogcatTagS")
                 .setLogcatMethodCount(7)
                 .setLogcatShowThreadInfo(false)
+                .setDiskPath(Environment.getExternalStorageDirectory().absolutePath + File.separatorChar + "service")
                 .build()
         ELog.init(configs)
+
         ELog.e("info %s", "this is a test format string!")
 
         return super.onStartCommand(intent, flags, startId)
