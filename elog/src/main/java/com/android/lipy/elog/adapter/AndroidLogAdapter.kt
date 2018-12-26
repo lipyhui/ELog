@@ -17,7 +17,7 @@ import com.android.lipy.elog.interfaces.LogAdapter
  * └──────────────────────────
  * </pre>
  */
-class AndroidLogAdapter : LogAdapter {
+internal class AndroidLogAdapter : LogAdapter {
 
     private val formatStrategy: FormatStrategy
 

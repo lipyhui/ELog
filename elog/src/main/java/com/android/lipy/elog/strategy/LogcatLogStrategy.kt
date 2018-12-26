@@ -1,7 +1,7 @@
 package com.android.lipy.elog.strategy
 
 import android.util.Log
-import com.android.lipy.elog.LoggerPrinter.Companion.DEFAULT_TAG
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
 import com.android.lipy.elog.interfaces.LogStrategy
 
 /**

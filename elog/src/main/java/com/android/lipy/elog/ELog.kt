@@ -1,9 +1,14 @@
 package com.android.lipy.elog
 
+import com.android.lipy.elog.ELog.init
+import com.android.lipy.elog.adapter.AndroidLogAdapter
 import com.android.lipy.elog.interfaces.FormatStrategy
 import com.android.lipy.elog.interfaces.LogAdapter
 import com.android.lipy.elog.interfaces.LogStrategy
 import com.android.lipy.elog.interfaces.Printer
+import com.android.lipy.elog.strategy.CsvFormatStrategy
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * <pre>
@@ -75,19 +80,25 @@ import com.android.lipy.elog.interfaces.Printer
  * @see LogStrategy
  */
 object ELog {
+    private var printer: Printer? = null
 
-    private var printer: Printer = LoggerPrinter()
-
-    fun printer(printer: Printer) {
-        ELog.printer = checkNotNull(printer)
-    }
-
-    fun addLogAdapter(adapter: LogAdapter) {
-        printer.addAdapter(checkNotNull(adapter))
+    /**
+     * init printer
+     *
+     * @param configs Detailed configuration see [ELogConfigs]
+     */
+    fun init(configs: ELogConfigs) {
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            printer = configs.mPrinter
+        }
     }
 
     fun clearLogAdapters() {
-        printer.clearLogAdapters()
+        //clear log adapters
+        printer?.clearLogAdapters()
+
+        //add default android log adapter
+        printer?.addAdapter(AndroidLogAdapter())
     }
 
     /**
@@ -96,42 +107,78 @@ object ELog {
      * be used for the subsequent log calls
      */
     fun t(tag: String): Printer {
-        return printer.t(tag)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        return printer!!.t(tag)
     }
 
     /**
      * General log function that accepts all configurations as parameter
      */
     fun log(priority: Int, tag: String, message: String, throwable: Throwable) {
-        printer.log(priority, tag, message, throwable)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.log(priority, tag, message, throwable)
     }
 
     fun d(message: String, vararg args: Any) {
-        printer.d(message, *args)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.d(message, *args)
     }
 
     fun d(obj: Any) {
-        printer.d(obj)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.d(obj)
     }
 
     fun e(message: String, vararg args: Any) {
-        printer.e(null, message, *args)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.e(null, message, *args)
     }
 
     fun e(throwable: Throwable, message: String, vararg args: Any) {
-        printer.e(throwable, message, *args)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.e(throwable, message, *args)
     }
 
     fun i(message: String, vararg args: Any) {
-        printer.i(message, *args)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.i(message, *args)
     }
 
     fun v(message: String, vararg args: Any) {
-        printer.v(message, *args)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.v(message, *args)
     }
 
     fun w(message: String, vararg args: Any) {
-        printer.w(message, *args)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.w(message, *args)
     }
 
     /**
@@ -139,49 +186,77 @@ object ELog {
      * ie: Unexpected errors etc
      */
     fun wtf(message: String, vararg args: Any) {
-        printer.wtf(message, *args)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.wtf(message, *args)
     }
 
     /**
      * Formats the given json content and print it
      */
     fun json(json: String?) {
-        printer.json(json)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.json(json)
     }
 
     /**
      * Formats the given xml content and print it
      */
     fun xml(xml: String?) {
-        printer.xml(xml)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.xml(xml)
     }
 
     /**
      * byte to hex and print it
      */
     fun hex(byte: Byte) {
-        printer.hex(null, byte)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.hex(null, byte)
     }
 
     /**
      * byte to hex and print it
      */
     fun hex(message: String, byte: Byte) {
-        printer.hex(message, byte)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.hex(message, byte)
     }
 
     /**
      * byte array to hex and print it
      */
     fun hex(bytes: ByteArray) {
-        printer.hex(null, bytes)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.hex(null, bytes)
     }
 
     /**
      * byte array to hex and print it
      */
     fun hex(message: String, bytes: ByteArray) {
-        printer.hex(message, bytes)
+        if (printer == null || printer?.getAdaptersSize()!! <= 0) {
+            init(ELogConfigs.Builder().build())
+        }
+
+        printer?.hex(message, bytes)
     }
 
 }//no instance

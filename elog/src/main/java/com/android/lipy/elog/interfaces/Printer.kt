@@ -8,6 +8,10 @@ interface Printer {
 
     fun addAdapter(adapter: LogAdapter)
 
+    fun addAdapters(adapters: ArrayList<LogAdapter>)
+
+    fun getAdaptersSize(): Int
+
     fun t(tag: String?): Printer
 
     fun d(message: String, vararg args: Any)
@@ -56,7 +60,7 @@ interface Printer {
      */
     fun hex(message: String?, bytes: ByteArray?)
 
-    fun log(priority: Int, tag: String, msg: String?, throwable: Throwable?)
+    fun log(priority: Int, tag: String?, msg: String?, throwable: Throwable?)
 
     fun clearLogAdapters()
 }

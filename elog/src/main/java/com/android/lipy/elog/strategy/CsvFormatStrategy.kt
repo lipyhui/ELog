@@ -2,7 +2,9 @@ package com.android.lipy.elog.strategy
 
 import android.os.Environment
 import android.os.HandlerThread
-import com.android.lipy.elog.LoggerPrinter.Companion.DEFAULT_TAG
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DATA_FORMAT
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DIR
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
 import com.android.lipy.elog.Utils
 import com.android.lipy.elog.interfaces.FormatStrategy
 import com.android.lipy.elog.interfaces.LogStrategy
@@ -120,11 +122,11 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
                 date = Date()
             }
             if (dateFormat == null) {
-                dateFormat = SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS", Locale.UK)
+                dateFormat = SimpleDateFormat(DEFAULT_DATA_FORMAT, Locale.UK)
             }
             if (logStrategy == null) {
                 val diskPath = Environment.getExternalStorageDirectory().absolutePath
-                val folder = diskPath + File.separatorChar + "ELog"
+                val folder = diskPath + File.separatorChar + DEFAULT_DIR
 
                 val ht = HandlerThread("AndroidFileELog.$folder")
                 ht.start()

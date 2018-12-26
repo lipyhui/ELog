@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.android.lipy.elog.adapter.AndroidLogAdapter
-import com.android.lipy.elog.adapter.DiskLogAdapter
 import com.android.lipy.elog.ELog
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -16,9 +14,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         test()
 
+//        ELog.Builder()
+
         //init
-        ELog.addLogAdapter(AndroidLogAdapter())
-        ELog.addLogAdapter(DiskLogAdapter())
 
         ELog.t("TEST_TAG").hex(0x08)
         ELog.hex("bytes is", byteArrayOf(0x14, 0x33, 0x02, 0x15, 0xf2.toByte(), 0x0e))

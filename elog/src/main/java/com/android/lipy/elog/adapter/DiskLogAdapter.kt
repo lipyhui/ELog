@@ -8,7 +8,7 @@ import com.android.lipy.elog.interfaces.LogAdapter
  * This is used to saves log messages to the disk.
  * By default it uses [CsvFormatStrategy] to translates text message into CSV format.
  */
-class DiskLogAdapter : LogAdapter {
+internal class DiskLogAdapter : LogAdapter {
 
     private val formatStrategy: FormatStrategy
 

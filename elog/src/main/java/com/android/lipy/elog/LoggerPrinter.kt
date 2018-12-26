@@ -1,6 +1,7 @@
 package com.android.lipy.elog
 
 import android.util.Log.*
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
 import com.android.lipy.elog.interfaces.LogAdapter
 import com.android.lipy.elog.interfaces.Printer
 import org.json.JSONArray
@@ -14,6 +15,7 @@ import javax.xml.transform.TransformerException
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
+import kotlin.collections.ArrayList
 
 internal class LoggerPrinter : Printer {
     /**
@@ -26,14 +28,15 @@ internal class LoggerPrinter : Printer {
     /**
      * @return the appropriate tag based on local or global
      */
-    private val tag: String
+    private val tag: String?
         get() {
             val tag = localTag.get()
             if (tag != null) {
                 localTag.remove()
                 return tag
             }
-            return DEFAULT_TAG
+
+            return null
         }
 
     override fun t(tag: String?): Printer {
@@ -186,7 +189,7 @@ internal class LoggerPrinter : Printer {
 
     @Synchronized
     override fun log(priority: Int,
-                     tag: String,
+                     tag: String?,
                      msg: String?,
                      throwable: Throwable?) {
         var message = msg
@@ -215,6 +218,14 @@ internal class LoggerPrinter : Printer {
         logAdapters.add(checkNotNull(adapter))
     }
 
+    override fun addAdapters(adapters: ArrayList<LogAdapter>) {
+        logAdapters.addAll(adapters)
+    }
+
+    override fun getAdaptersSize(): Int {
+        return logAdapters.size
+    }
+
     /**
      * This method is synchronized in order to avoid messy of logs' order.
      */
@@ -240,7 +251,5 @@ internal class LoggerPrinter : Printer {
          * It is used for json pretty print
          */
         private const val JSON_INDENT = 2
-
-        const val DEFAULT_TAG = "E_LOGGER"
     }
 }

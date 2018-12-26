@@ -1,8 +1,12 @@
 package com.android.lipy.elog.strategy
 
 import com.android.lipy.elog.ELog
+import com.android.lipy.elog.ELogConfigs
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_IS_SHOW_THREAD_INFO
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_METHOD_COUNT
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_METHOD_OFFSET
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
 import com.android.lipy.elog.LoggerPrinter
-import com.android.lipy.elog.LoggerPrinter.Companion.DEFAULT_TAG
 import com.android.lipy.elog.interfaces.FormatStrategy
 import com.android.lipy.elog.interfaces.LogStrategy
 
@@ -187,9 +191,9 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
     }
 
     class Builder internal constructor() {
-        internal var methodCount = 2
-        internal var methodOffset = 0
-        internal var showThreadInfo = true
+        internal var methodCount = DEFAULT_METHOD_COUNT
+        internal var methodOffset = DEFAULT_METHOD_OFFSET
+        internal var showThreadInfo = DEFAULT_IS_SHOW_THREAD_INFO
         internal var logStrategy: LogStrategy? = null
         internal var tag: String? = DEFAULT_TAG
 
