@@ -33,12 +33,14 @@ import kotlin.collections.ArrayList
  *  .setTag("MyTestConfigs")                                //Set default TAG, Use tag if you don't have set diskTag or logcatTag. Default [DEFAULT_TAG]
  *  //logcat configs
  *  .setLogcatTag("TestLogcatTag")                          //Set logcatTag. Default [DEFAULT_TAG]
+ *  .setDiskDebugPriority(Log.WARN)                         //Set debug priority. Default [DEFAULT_DEBUG_PRIORITY]
  *  .setLogcatMethodCount(7)                                //Set the method count of logcat displays,. Default [DEFAULT_METHOD_COUNT]
  *  .setLogcatMethodOffset(2)                               //Set the method offset of logcat displays. Default [DEFAULT_METHOD_OFFSET]
  *  .setLogcatShowThreadInfo(false)                         //Set whether to show thread info. Default [DEFAULT_IS_SHOW_THREAD_INFO]
  *  .setLogcatLogStrategy(CustomLogStrategy)                //Setting up custom LogStrategy. Default [LogcatLogStrategy]
  *  //disk configs
  *  .setDiskTag("TestDiskTag")                              //Set diskTag. Default [DEFAULT_TAG]
+ *  .setDiskDebugPriority(ELogConfigs.DEBUG_STOP)           //Set debug priority. Default [DEFAULT_DEBUG_PRIORITY]
  *  .setDiskDate(Date(2018, 1, 1, 24, 58))                  //Set diskTag. Default current system time
  *  .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //Set diskTag. Default [DEFAULT_DATA_FORMAT]
  *  .setDiskLogStrategy(CustomLogStrategy)                  //Setting up custom LogStrategy. Default [DiskLogStrategy]
