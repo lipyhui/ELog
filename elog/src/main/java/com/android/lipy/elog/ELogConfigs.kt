@@ -1,16 +1,54 @@
 package com.android.lipy.elog
 
+import android.app.Application
 import com.android.lipy.elog.adapter.AndroidLogAdapter
 import com.android.lipy.elog.adapter.DiskLogAdapter
 import com.android.lipy.elog.interfaces.LogAdapter
 import com.android.lipy.elog.interfaces.LogStrategy
 import com.android.lipy.elog.interfaces.Printer
 import com.android.lipy.elog.strategy.CsvFormatStrategy
+import com.android.lipy.elog.strategy.DiskLogStrategy
 import com.android.lipy.elog.strategy.PrettyFormatStrategy
+import com.android.lipy.elog.strategy.LogcatLogStrategy
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+/**
+ *  //init
+ *
+ * <h3>Customize</h3>
+ *  <h4>If you want to customize on application at [Application];
+ *  If you want to customize on Thread at [Thread]; </h4>
+ * <pre>
+ *  //configs
+ *  val configs = ELogConfigs.Builder()
+ *  .enableLogcat()                                         //Enable android logcat.Default [DEFAULT_ENABLE_LOGCAT]
+ *  .enableDiskLog()                                        //Enable save log to disk.Default [DEFAULT_ENABLE_DISK_LOG]
+ *  .setPrinter(CustomPrinter)                              //Setting up custom Printer. Default [ELogPrinter]
+ *  .addLogAdapter(CustomLogAdapters)                       //Add custom LogAdapters. Default [AndroidLogAdapter] or [DiskLogAdapter]
+ *  .setTag("MyTestConfigs")                                //Set default TAG, Use tag if you don't have set diskTag or logcatTag. Default [DEFAULT_TAG]
+ *  //logcat configs
+ *  .setLogcatTag("TestLogcatTag")                          //Set logcatTag. Default [DEFAULT_TAG]
+ *  .setLogcatMethodCount(7)                                //Set the method count of logcat displays,. Default [DEFAULT_METHOD_COUNT]
+ *  .setLogcatMethodOffset(2)                               //Set the method offset of logcat displays. Default [DEFAULT_METHOD_OFFSET]
+ *  .setLogcatShowThreadInfo(false)                         //Set whether to show thread info. Default [DEFAULT_IS_SHOW_THREAD_INFO]
+ *  .setLogcatLogStrategy(CustomLogStrategy)                //Setting up custom LogStrategy. Default [LogcatLogStrategy]
+ *  //disk configs
+ *  .setDiskTag("TestDiskTag")                              //Set diskTag. Default [DEFAULT_TAG]
+ *  .setDiskDate(Date(2018, 1, 1, 24, 58))                  //Set diskTag. Default current system time
+ *  .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //Set diskTag. Default [DEFAULT_DATA_FORMAT]
+ *  .setDiskLogStrategy(CustomLogStrategy)                  //Setting up custom LogStrategy. Default [DiskLogStrategy]
+ *  .build()
+ *
+ *  //init
+ *  ELog.init(configs)
+ *  </pre>
+ *
+ * @property mPrinter Printer
+ * @property mLogAdapters ArrayList<LogAdapter>
+ * @constructor
+ */
 class ELogConfigs private constructor(builder: Builder) {
     //custom printer
     var mPrinter: Printer
@@ -73,9 +111,9 @@ class ELogConfigs private constructor(builder: Builder) {
         private var mTag: String? = DEFAULT_TAG
 
         //enable default logcat
-        internal var mEnableLogcat: Boolean = true
+        internal var mEnableLogcat: Boolean = DEFAULT_ENABLE_LOGCAT
         //enable default disk log
-        internal var mEnableDiskLog: Boolean = false
+        internal var mEnableDiskLog: Boolean = DEFAULT_ENABLE_DISK_LOG
 
         //custom printer
         internal var mPrinter: Printer? = null
@@ -198,6 +236,10 @@ class ELogConfigs private constructor(builder: Builder) {
 
     companion object {
         const val DEFAULT_TAG = "ELOG"
+
+        //log switch
+        const val DEFAULT_ENABLE_LOGCAT = true
+        const val DEFAULT_ENABLE_DISK_LOG = false
 
         //logcat
         const val DEFAULT_METHOD_COUNT = 2
