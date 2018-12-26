@@ -23,7 +23,7 @@ class ELogConfigs private constructor(builder: Builder) {
 
         //printer
         mPrinter = if (builder.mPrinter == null) {
-            LoggerPrinter()
+            ELogPrinter()
         } else {
             builder.mPrinter!!
         }

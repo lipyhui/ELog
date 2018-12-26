@@ -17,7 +17,7 @@ import javax.xml.transform.stream.StreamResult
 import javax.xml.transform.stream.StreamSource
 import kotlin.collections.ArrayList
 
-internal class LoggerPrinter : Printer {
+internal class ELogPrinter : Printer {
     /**
      * Provides one-time used tag for the log message
      */

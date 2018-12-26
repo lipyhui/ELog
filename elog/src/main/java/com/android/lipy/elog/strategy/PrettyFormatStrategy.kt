@@ -1,12 +1,11 @@
 package com.android.lipy.elog.strategy
 
 import com.android.lipy.elog.ELog
-import com.android.lipy.elog.ELogConfigs
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_IS_SHOW_THREAD_INFO
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_METHOD_COUNT
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_METHOD_OFFSET
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
-import com.android.lipy.elog.LoggerPrinter
+import com.android.lipy.elog.ELogPrinter
 import com.android.lipy.elog.interfaces.FormatStrategy
 import com.android.lipy.elog.interfaces.LogStrategy
 
@@ -176,7 +175,7 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
         while (i < trace.size) {
             val e = trace[i]
             val name = e.className
-            if (name != LoggerPrinter::class.java.name && name != ELog::class.java.name) {
+            if (name != ELogPrinter::class.java.name && name != ELog::class.java.name) {
                 return --i
             }
             i++
