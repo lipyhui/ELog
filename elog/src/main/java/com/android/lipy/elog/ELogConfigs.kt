@@ -100,13 +100,13 @@ class ELogConfigs private constructor(builder: Builder) {
             return this
         }
 
-        fun enableLogcat(enable: Boolean): Builder {
-            mEnableLogcat = enable
+        fun enableLogcat(): Builder {
+            mEnableLogcat = true
             return this
         }
 
-        fun enableDiskLog(enable: Boolean): Builder {
-            mEnableDiskLog = enable
+        fun enableDiskLog(): Builder {
+            mEnableDiskLog = true
             return this
         }
 

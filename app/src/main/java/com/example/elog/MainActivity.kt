@@ -14,10 +14,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         test()
 
-//        ELog.Builder()
-
-        //init
-
         ELog.t("TEST_TAG").hex(0x08)
         ELog.hex("bytes is", byteArrayOf(0x14, 0x33, 0x02, 0x15, 0xf2.toByte(), 0x0e))
         ELog.v("%d, %s, %6f : %3f", 1, "test", 5F, 10F)

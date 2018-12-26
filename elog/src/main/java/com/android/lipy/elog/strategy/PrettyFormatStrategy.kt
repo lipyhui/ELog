@@ -33,7 +33,7 @@ import com.android.lipy.elog.interfaces.LogStrategy
  * FormatStrategy formatStrategy = PrettyFormatStrategy.Builder()
  * .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
  * .methodCount(0)         // (Optional) How many method line to show. Default 2
- * .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
+ * .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 0
  * .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
  * .tag("My custom tag")   // (Optional) Global tag for every log. Default [DEFAULT_TAG]
  * .build();
