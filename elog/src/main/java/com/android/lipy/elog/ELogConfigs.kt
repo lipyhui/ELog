@@ -41,8 +41,8 @@ import kotlin.collections.ArrayList
  *  //disk configs
  *  .setDiskTag("TestDiskTag")                              //Set diskTag. Default [DEFAULT_TAG]
  *  .setDiskDebugPriority(ELogConfigs.DEBUG_STOP)           //Set debug priority. Default [DEFAULT_DEBUG_PRIORITY]
- *  .setDiskDate(Date(2018, 1, 1, 24, 58))                  //Set diskTag. Default current system time
- *  .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //Set diskTag. Default [DEFAULT_DATA_FORMAT]
+ *  .setDiskDate(Date(2018, 1, 1, 24, 58))                  //Set disk date. Default current system time
+ *  .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //Set disk date format. Default [DEFAULT_DATA_FORMAT]
  *  .setDiskLogStrategy(CustomLogStrategy)                  //Setting up custom LogStrategy. Default [DiskLogStrategy]
  *  .setDiskPath(CustomDiskPath)                            //Setting up custom disk path, example "CustomDiskPath/ELog/logs_*.csv". Default "ExternalStorageDirectory/ELog/logs_*.csv"
  *  .build()
@@ -278,7 +278,7 @@ class ELogConfigs private constructor(builder: Builder) {
         internal const val DEFAULT_DEBUG_PRIORITY = VERBOSE
 
         //log switch
-        internal const val DEFAULT_ENABLE_LOGCAT = true
+        internal const val DEFAULT_ENABLE_LOGCAT = false
         internal const val DEFAULT_ENABLE_DISK_LOG = false
 
         //logcat
