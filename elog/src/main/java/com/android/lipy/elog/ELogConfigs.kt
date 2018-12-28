@@ -2,8 +2,18 @@ package com.android.lipy.elog
 
 import android.app.Application
 import android.os.Environment
-import android.util.Log
 import android.util.Log.VERBOSE
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DATA_FORMAT
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DEBUG_PRIORITY
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_ENABLE_DISK_LOG
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_ENABLE_LOGCAT
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_IS_SHOW_THREAD_INFO
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_METHOD_COUNT
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_METHOD_OFFSET
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_BORDER
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_THREAD_INFO
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_TIME_MS
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
 import com.android.lipy.elog.adapter.AndroidLogAdapter
 import com.android.lipy.elog.adapter.DiskLogAdapter
 import com.android.lipy.elog.interfaces.LogAdapter
@@ -11,8 +21,8 @@ import com.android.lipy.elog.interfaces.LogStrategy
 import com.android.lipy.elog.interfaces.Printer
 import com.android.lipy.elog.strategy.CsvFormatStrategy
 import com.android.lipy.elog.strategy.DiskLogStrategy
-import com.android.lipy.elog.strategy.PrettyFormatStrategy
 import com.android.lipy.elog.strategy.LogcatLogStrategy
+import com.android.lipy.elog.strategy.PrettyFormatStrategy
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -48,6 +58,7 @@ import kotlin.collections.ArrayList
  *  .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //Set disk date format. Default [DEFAULT_DATA_FORMAT]
  *  .setDiskLogStrategy(CustomLogStrategy)                  //Setting up custom LogStrategy. Default [DiskLogStrategy]
  *  .setDiskPath(CustomDiskPath)                            //Setting up custom disk path, example "CustomDiskPath/ELog/logs_*.csv". Default "ExternalStorageDirectory/ELog/logs_*.csv"
+ *  .setDiskFileSizeKB(1024)                                //Set a single disk log file size, unit KB . Default [DEFAULT_FILE_SIZE_KB]KB
  *  .build()
  *
  *  //init
@@ -100,6 +111,7 @@ class ELogConfigs private constructor(builder: Builder) {
                     .dateFormat(builder.mDiskDateFormat)
                     .logStrategy(builder.mDiskLogStrategy)
                     .diskPath(builder.mDiskPath)
+                    .diskFileSize(builder.mDiskFileSizeKB * BYTES_KB)
                     .build()
 
             //default disk adapter
@@ -151,6 +163,7 @@ class ELogConfigs private constructor(builder: Builder) {
         internal var mDiskDateFormat: SimpleDateFormat? = null
         internal var mDiskLogStrategy: LogStrategy? = null
         internal var mDiskPath: String? = null
+        internal var mDiskFileSizeKB: Int = DEFAULT_FILE_SIZE_KB
 
         fun setTag(tag: String?): Builder {
             mTag = tag
@@ -258,6 +271,11 @@ class ELogConfigs private constructor(builder: Builder) {
             return this
         }
 
+        fun setDiskFileSizeKB(diskFileSizeKB: Int): Builder {
+            mDiskFileSizeKB = diskFileSizeKB
+            return this
+        }
+
         fun build(): ELogConfigs {
             if (mTag.isNullOrEmpty()) {
                 mTag = DEFAULT_TAG
@@ -291,11 +309,18 @@ class ELogConfigs private constructor(builder: Builder) {
                 mDiskPath = Environment.getExternalStorageDirectory().absolutePath
             }
 
+            if (mDiskFileSizeKB <= 0) {
+                mDiskFileSizeKB = DEFAULT_FILE_SIZE_KB
+            }
+
             return ELogConfigs(this)
         }
     }
 
     companion object {
+        //stop debug log
+        const val DEBUG_STOP = Int.MAX_VALUE
+
         internal const val DEFAULT_TAG = "ELOG"
 
         //border
@@ -318,8 +343,9 @@ class ELogConfigs private constructor(builder: Builder) {
         internal const val DEFAULT_SHOW_THREAD_INFO = true
         internal const val DEFAULT_DATA_FORMAT = "yyyy.MM.dd HH:mm:ss.SSS"
         internal const val DEFAULT_DIR = "ELog"
+        internal const val DEFAULT_FILE_SIZE_KB = 500 // 500KB averages to a 4000 lines per file
 
-        //stop debug log
-        const val DEBUG_STOP = Int.MAX_VALUE
+        //constant
+        internal const val BYTES_KB = 1024 // 1KB
     }
 }

@@ -2,8 +2,10 @@ package com.android.lipy.elog.strategy
 
 import android.os.Environment
 import android.os.HandlerThread
+import com.android.lipy.elog.ELogConfigs.Companion.BYTES_KB
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DATA_FORMAT
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DIR
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_FILE_SIZE_KB
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_THREAD_INFO
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_TIME_MS
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
@@ -107,7 +109,9 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
         internal var date: Date? = null
         internal var dateFormat: SimpleDateFormat? = null
         internal var logStrategy: LogStrategy? = null
+
         private var diskPath: String? = null
+        private var diskFileSize: Int = DEFAULT_FILE_SIZE_KB * BYTES_KB
 
         fun tag(value: String?): Builder {
             tag = value
@@ -144,6 +148,11 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
             return this
         }
 
+        fun diskFileSize(value: Int): Builder {
+            diskFileSize = value
+            return this
+        }
+
         fun build(): CsvFormatStrategy {
             if (date == null) {
                 date = Date()
@@ -159,14 +168,15 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
 
                 val ht = HandlerThread("AndroidFileELog.$folder")
                 ht.start()
-                val handler = DiskLogStrategy.WriteHandler(ht.looper, folder, MAX_BYTES)
+
+                if (diskFileSize < BYTES_KB) {
+                    diskFileSize = DEFAULT_FILE_SIZE_KB * BYTES_KB
+                }
+
+                val handler = DiskLogStrategy.WriteHandler(ht.looper, folder, diskFileSize)
                 logStrategy = DiskLogStrategy(handler)
             }
             return CsvFormatStrategy(this)
-        }
-
-        companion object {
-            private const val MAX_BYTES = 500 * 1024 // 500K averages to a 4000 lines per file
         }
     }
 

@@ -3,7 +3,7 @@
 
 ## ELog使用配置
 ### gradle 配置
-#### 第一步：添加JitPack仓库到你编译项目中
+#### 第一步：添加JitPack仓库到你项目中
 &emsp;&emsp;在工程根目录的build.gradle中添加如下maven:
 ```
 allprojects {
@@ -14,16 +14,16 @@ allprojects {
 }
 ```
 
-#### 第二步：添加ELog
+#### 第二步：添加ELog库
 &emsp;&emsp;在应用的build.gradle中添加ELog:
 ```
 dependencies {
-	implementation 'com.github.lipyhui:ELog:v1.0.1'
+	implementation 'com.github.lipyhui:ELog:v1.0.2'
 }
 ```
 
 ### maven 配置
-#### 第一步：添加JitPack仓库到你编译项目中
+#### 第一步：添加JitPack仓库到你项目中
 ```
 <repositories>
 	<repository>
@@ -33,12 +33,12 @@ dependencies {
 </repositories>
 ```
 
-#### 第二步：添加ELog
+#### 第二步：添加ELog库
 ```
 <dependency>
 	<groupId>com.github.lipyhui</groupId>
 	<artifactId>ELog</artifactId>
-	<version>v1.0.1</version>
+	<version>v1.0.2</version>
 </dependency>
 ```
 
@@ -47,8 +47,8 @@ dependencies {
 ![图一](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/1.png)
 ![图二](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/2.png)
 ![图三](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/3.png)
-![图三](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/4.png)
-![图三](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/5.png)
+![图四](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/4.png)
+![图五](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/5.png)
 
 ### ELog初始化
 &emsp;&emsp;ELog默认会初始化一个Logcat日志打印器，因此不初始化也能正常使用ELog。
@@ -77,10 +77,11 @@ val configs = ELogConfigs.Builder()
   .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //设置磁盘日志格式。默认“yyyy.MM.dd HH:mm:ss.SSS”
   .setDiskLogStrategy(CustomLogStrategy)                  //自定义磁盘日志打印器。
   .setDiskPath(CustomDiskPath)                            //自定义磁盘日志保存路径，文件保存路径为“CustomDiskPath/ELog/*”。默认日志路径为：“Sdcard/ELog/*”
+  .setDiskFileSizeKB(1024)                            	  //设置磁盘单个文件大小，单位KB。默认500KB
   .build()
 
   //设置自定义配置项
-  ELog.ini(configs)
+  ELog.init(configs)
 ```
 
 ### ELog打印日志
