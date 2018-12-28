@@ -3,8 +3,8 @@ package com.android.lipy.elog.strategy
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import com.android.lipy.elog.ELogConfigs.Companion.SUFFIX_NAME
 import com.android.lipy.elog.interfaces.LogStrategy
-
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -81,15 +81,14 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
                 folder.mkdirs()
             }
 
-            var newFileCount = 0
             var newFile: File
             var existingFile: File? = null
 
-            newFile = File(folder, String.format("%s_%s.csv", fileName, newFileCount))
+            newFile = File(folder, String.format("%s_%s%s", fileName, newFileCount, SUFFIX_NAME))
             while (newFile.exists()) {
                 existingFile = newFile
                 newFileCount++
-                newFile = File(folder, String.format("%s_%s.csv", fileName, newFileCount))
+                newFile = File(folder, String.format("%s_%s%s", fileName, newFileCount, SUFFIX_NAME))
             }
 
             return if (existingFile != null) {
@@ -99,5 +98,9 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
             } else newFile
 
         }
+    }
+
+    companion object {
+        private var newFileCount = 0
     }
 }

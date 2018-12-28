@@ -347,5 +347,6 @@ class ELogConfigs private constructor(builder: Builder) {
 
         //constant
         internal const val BYTES_KB = 1024 // 1KB
+        internal const val SUFFIX_NAME = ".csv" //disk log suffix name
     }
 }
