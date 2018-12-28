@@ -2,7 +2,6 @@ package com.android.lipy.elog.strategy
 
 import android.os.Environment
 import android.os.HandlerThread
-import com.android.lipy.elog.ELogConfigs
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DATA_FORMAT
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DIR
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_THREAD_INFO
