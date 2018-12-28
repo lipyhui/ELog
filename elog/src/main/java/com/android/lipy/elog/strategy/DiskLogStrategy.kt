@@ -3,7 +3,7 @@ package com.android.lipy.elog.strategy
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.Log
+import com.android.lipy.elog.ELogConfigs.Companion.FILE_NAME
 import com.android.lipy.elog.ELogConfigs.Companion.SUFFIX_NAME
 import com.android.lipy.elog.interfaces.LogStrategy
 import java.io.File
@@ -27,15 +27,38 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
         handler.sendMessage(handler.obtainMessage(priority, message))
     }
 
-    internal class WriteHandler(looper: Looper, folder: String, private val maxFileSize: Int) : Handler(checkNotNull(looper)) {
+    internal class WriteHandler(looper: Looper, folderPath: String, private val maxFileSize: Int) : Handler(checkNotNull(looper)) {
 
-        private val folder: String = checkNotNull(folder)
+        private val folderStr: String = checkNotNull(folderPath)
+
+        init {
+            val folder = File(folderStr)
+            val fileName = FILE_NAME
+            if (!folder.exists()) {
+                //TODO: What if folder is not created, what happens then?
+                folder.mkdirs()
+            }
+
+            var existFileCount: Int
+            folder.list { _, name ->
+                if (name.startsWith(fileName) && name.endsWith(SUFFIX_NAME)) {
+                    try {
+                        existFileCount = name.replace("${fileName}_", "").replace(SUFFIX_NAME, "").toInt()
+
+                        newFileCount = Math.max(newFileCount, existFileCount)
+                    } catch (e: Exception) {
+                        System.out.println(e)
+                    }
+                }
+                return@list true
+            }
+        }
 
         override fun handleMessage(msg: Message) {
             val content = msg.obj as String
 
             var fileWriter: FileWriter? = null
-            val logFile = getLogFile(folder, "logs")
+            val logFile = getLogFile(folderStr, FILE_NAME)
 
             try {
                 fileWriter = FileWriter(logFile, true)
@@ -82,26 +105,6 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
                 folder.mkdirs()
             }
 
-            var existFileCount: Int
-            if (newFileCount < 0) {
-                folder.list { _, name ->
-                    if (name.startsWith(fileName) && name.endsWith(SUFFIX_NAME)) {
-                        try {
-                            existFileCount = name.replace("${fileName}_", "").replace(SUFFIX_NAME, "").toInt()
-
-                            newFileCount = Math.max(newFileCount, existFileCount)
-                        } catch (e: Exception) {
-                            System.out.println(e)
-                        }
-                    }
-                    return@list true
-                }
-            }
-
-            if (newFileCount < 0) {
-                newFileCount = 0
-            }
-
             var newFile: File
             var existingFile: File? = null
 
@@ -126,6 +129,6 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
     }
 
     companion object {
-        private var newFileCount = -1
+        private var newFileCount = 0
     }
 }
