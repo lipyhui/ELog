@@ -33,8 +33,9 @@ import kotlin.collections.ArrayList
  *  .setTag("MyTestConfigs")                                //Set default TAG, Use tag if you don't have set diskTag or logcatTag. Default [DEFAULT_TAG]
  *  //logcat configs
  *  .setLogcatTag("TestLogcatTag")                          //Set logcatTag. Default [DEFAULT_TAG]
+ *  .setLogcatShowBorder(false)                             //Set whether to show border or div. Default [DEFAULT_SHOW_BORDER]
  *  .setDiskDebugPriority(Log.WARN)                         //Set debug priority. Default [DEFAULT_DEBUG_PRIORITY]
- *  .setLogcatMethodCount(7)                                //Set the method count of logcat displays,. Default [DEFAULT_METHOD_COUNT]
+ *  .setLogcatMethodCount(7)                                //Set the method count of logcat displays,setting to zero cancels the display method. Default [DEFAULT_METHOD_COUNT]
  *  .setLogcatMethodOffset(2)                               //Set the method offset of logcat displays. Default [DEFAULT_METHOD_OFFSET]
  *  .setLogcatShowThreadInfo(false)                         //Set whether to show thread info. Default [DEFAULT_IS_SHOW_THREAD_INFO]
  *  .setLogcatLogStrategy(CustomLogStrategy)                //Setting up custom LogStrategy. Default [LogcatLogStrategy]
@@ -76,6 +77,7 @@ class ELogConfigs private constructor(builder: Builder) {
         if (builder.mEnableLogcat) {
             val logcatFormatStrategy = PrettyFormatStrategy.Builder()
                     .tag(builder.mLogcatTag)
+                    .showBorder(builder.mLogcatShowBorder)
                     .methodCount(builder.mLogcatMethodCount)
                     .methodOffset(builder.mLogcatMethodOffset)
                     .showThreadInfo(builder.mLogcatShowThreadInfo)
@@ -129,6 +131,7 @@ class ELogConfigs private constructor(builder: Builder) {
 
         //logcat configs
         internal var mLogcatTag: String? = null
+        internal var mLogcatShowBorder = DEFAULT_SHOW_BORDER
         internal var mLogcatDebugPriority = DEFAULT_DEBUG_PRIORITY
         internal var mLogcatMethodCount = DEFAULT_METHOD_COUNT
         internal var mLogcatMethodOffset = DEFAULT_METHOD_OFFSET
@@ -173,6 +176,11 @@ class ELogConfigs private constructor(builder: Builder) {
          ***************************************************************/
         fun setLogcatTag(logcatTag: String?): Builder {
             mLogcatTag = logcatTag
+            return this
+        }
+
+        fun setLogcatShowBorder(logcatShowBorder: Boolean): Builder {
+            mLogcatShowBorder = logcatShowBorder
             return this
         }
 
@@ -273,6 +281,9 @@ class ELogConfigs private constructor(builder: Builder) {
 
     companion object {
         internal const val DEFAULT_TAG = "ELOG"
+
+        //border
+        internal const val DEFAULT_SHOW_BORDER = true
 
         //debug priority
         internal const val DEFAULT_DEBUG_PRIORITY = VERBOSE

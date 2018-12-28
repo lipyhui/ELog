@@ -4,6 +4,7 @@ import com.android.lipy.elog.ELog
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_IS_SHOW_THREAD_INFO
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_METHOD_COUNT
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_METHOD_OFFSET
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_BORDER
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
 import com.android.lipy.elog.ELogPrinter
 import com.android.lipy.elog.interfaces.FormatStrategy
@@ -31,30 +32,32 @@ import com.android.lipy.elog.interfaces.LogStrategy
  * <h3>Customize</h3>
  * <pre>
  * FormatStrategy formatStrategy = PrettyFormatStrategy.Builder()
+ * .tag("My custom tag")   // (Optional) Global tag for every log. Default [DEFAULT_TAG]
  * .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
  * .methodCount(0)         // (Optional) How many method line to show. Default 2
  * .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 0
  * .logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
- * .tag("My custom tag")   // (Optional) Global tag for every log. Default [DEFAULT_TAG]
  * .build();
  * </pre>
  */
 internal class PrettyFormatStrategy private constructor(builder: Builder) : FormatStrategy {
 
+    private val tag: String?
+    private val showBorder: Boolean
     private val methodCount: Int
     private val methodOffset: Int
     private val showThreadInfo: Boolean
     private val logStrategy: LogStrategy
-    private val tag: String?
 
     init {
         checkNotNull(builder)
 
+        tag = builder.tag
+        showBorder = builder.showBorder
         methodCount = builder.methodCount
         methodOffset = builder.methodOffset
         showThreadInfo = builder.showThreadInfo
         logStrategy = builder.logStrategy!!
-        tag = builder.tag
     }
 
     override fun log(priority: Int, onceOnlyTag: String?, msg: String) {
@@ -62,21 +65,25 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
 
         val tag = formatTag(onceOnlyTag)
 
-        logTopBorder(priority, tag)
+        if (showBorder) {
+            logTopBorder(priority, tag)
+        }
         logHeaderContent(priority, tag, methodCount)
 
         //get bytes of message with system's default charset (which is UTF-8 for Android)
         val bytes = msg.toByteArray()
         val length = bytes.size
         if (length <= CHUNK_SIZE) {
-            if (methodCount > 0) {
+            if (showBorder && methodCount > 0) {
                 logDivider(priority, tag)
             }
             logContent(priority, tag, msg)
-            logBottomBorder(priority, tag)
+            if (showBorder) {
+                logBottomBorder(priority, tag)
+            }
             return
         }
-        if (methodCount > 0) {
+        if (showBorder && methodCount > 0) {
             logDivider(priority, tag)
         }
         var i = 0
@@ -86,7 +93,10 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
             logContent(priority, tag, String(bytes, i, count))
             i += CHUNK_SIZE
         }
-        logBottomBorder(priority, tag)
+
+        if (showBorder) {
+            logBottomBorder(priority, tag)
+        }
     }
 
     private fun logTopBorder(logType: Int, tag: String?) {
@@ -97,8 +107,12 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
         var methodCount = methodCountI
         val trace = Thread.currentThread().stackTrace
         if (showThreadInfo) {
-            logChunk(logType, tag, HORIZONTAL_LINE + " Thread: " + Thread.currentThread().name)
-            logDivider(logType, tag)
+            if (showBorder) {
+                logChunk(logType, tag, "$HORIZONTAL_LINE Thread: ${Thread.currentThread().name}")
+                logDivider(logType, tag)
+            } else {
+                logChunk(logType, tag, "Thread: ${Thread.currentThread().name}")
+            }
         }
         var level = ""
 
@@ -115,7 +129,7 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
                 continue
             }
             val builder = StringBuilder()
-            builder.append(HORIZONTAL_LINE)
+            builder.append(if (showBorder) HORIZONTAL_LINE else "")
                     .append(' ')
                     .append(level)
                     .append(getSimpleClassName(trace[stackIndex].className))
@@ -145,7 +159,11 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
 
         val lines = chunk.split(System.getProperty("line.separator").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         for (line in lines) {
-            logChunk(logType, tag, "$HORIZONTAL_LINE $line")
+            if (showBorder) {
+                logChunk(logType, tag, "$HORIZONTAL_LINE $line")
+            } else {
+                logChunk(logType, tag, line)
+            }
         }
     }
 
@@ -191,6 +209,7 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
 
     class Builder internal constructor() {
         internal var tag: String? = DEFAULT_TAG
+        internal var showBorder: Boolean = DEFAULT_SHOW_BORDER
         internal var methodCount = DEFAULT_METHOD_COUNT
         internal var methodOffset = DEFAULT_METHOD_OFFSET
         internal var showThreadInfo = DEFAULT_IS_SHOW_THREAD_INFO
@@ -198,6 +217,11 @@ internal class PrettyFormatStrategy private constructor(builder: Builder) : Form
 
         fun tag(tag: String?): Builder {
             this.tag = tag
+            return this
+        }
+
+        fun showBorder(value: Boolean): Builder {
+            showBorder = value
             return this
         }
 

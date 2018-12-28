@@ -47,6 +47,8 @@ dependencies {
 ![图一](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/1.png)
 ![图二](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/2.png)
 ![图三](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/3.png)
+![图三](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/4.png)
+![图三](https://raw.githubusercontent.com/lipyhui/ELog/master/screenshots/5.png)
 
 ### ELog初始化
 &emsp;&emsp;ELog默认会初始化一个Logcat日志打印器，因此不初始化也能正常使用ELog。
@@ -60,10 +62,11 @@ val configs = ELogConfigs.Builder()
   .setTag("MyTestConfigs")                                //设置TAG，如果没logcatTag或diskTag，则logcatTag或diskTag使用该Tag。
   //logcat配置项
   .setLogcatTag("TestLogcatTag")                          //设置logcatTag，如果设置了该项，则不使用setTag配置的tag。
+  .setLogcatShowBorder(false)                             //设置logcat是否显示边框、分割线。默认显示
   .setDiskDebugPriority(Log.WARN)                         //设置logcat日志打印最低级别，配置为ELogConfigs.DEBUG_STOP则不打印日志。默认VERBOSE级别
-  .setLogcatMethodCount(7)                                //设置logcat显示方法数。默认2
+  .setLogcatMethodCount(7)                                //设置logcat显示方法数，设置为0可取消方法打印。默认2
   .setLogcatMethodOffset(2)                               //设置logcat方法偏移量。默认0
-  .setLogcatShowThreadInfo(false)                         //设置logcat是否显示进程信息。
+  .setLogcatShowThreadInfo(false)                         //设置logcat是否显示进程信息。默认显示
   .setLogcatLogStrategy(CustomLogStrategy)                //自定义logcat日志打印器。
   //disk日志配置项
   .setDiskTag("TestDiskTag")                              //设置diskTag，如果设置了该项，则不使用setTag配置的tag。

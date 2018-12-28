@@ -19,18 +19,18 @@ import java.util.*
  */
 internal class CsvFormatStrategy private constructor(builder: Builder) : FormatStrategy {
 
+    private val tag: String?
     private val date: Date
     private val dateFormat: SimpleDateFormat
     private val logStrategy: LogStrategy
-    private val tag: String?
 
     init {
         checkNotNull(builder)
 
+        tag = builder.tag
         date = builder.date!!
         dateFormat = builder.dateFormat!!
         logStrategy = builder.logStrategy!!
-        tag = builder.tag
     }
 
     override fun log(priority: Int, onceOnlyTag: String?, msg: String) {
