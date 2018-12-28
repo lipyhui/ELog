@@ -59,6 +59,7 @@ import kotlin.collections.ArrayList
  *  .setDiskLogStrategy(CustomLogStrategy)                  //Setting up custom LogStrategy. Default [DiskLogStrategy]
  *  .setDiskPath(CustomDiskPath)                            //Setting up custom disk path, example "CustomDiskPath/ELog/logs_*.csv". Default "ExternalStorageDirectory/ELog/logs_*.csv"
  *  .setDiskFileSizeKB(1024)                                //Set a single disk log file size, unit KB . Default [DEFAULT_FILE_SIZE_KB]KB
+ *  .setDiskFileCountMax(10)                                //Set the maximum number of disk log file. Default [DEFAULT_FILE_COUNT_MAX]
  *  .build()
  *
  *  //init
@@ -110,8 +111,9 @@ class ELogConfigs private constructor(builder: Builder) {
                     .date(builder.mDiskDate)
                     .dateFormat(builder.mDiskDateFormat)
                     .logStrategy(builder.mDiskLogStrategy)
-                    .diskPath(builder.mDiskPath)
-                    .diskFileSize(builder.mDiskFileSizeKB * BYTES_KB)
+                    .path(builder.mDiskPath)
+                    .fileSize(builder.mDiskFileSizeKB * BYTES_KB)
+                    .fileCountMax(builder.mDiskFileCountMax)
                     .build()
 
             //default disk adapter
@@ -164,6 +166,7 @@ class ELogConfigs private constructor(builder: Builder) {
         internal var mDiskLogStrategy: LogStrategy? = null
         internal var mDiskPath: String? = null
         internal var mDiskFileSizeKB: Int = DEFAULT_FILE_SIZE_KB
+        internal var mDiskFileCountMax: Int = DEFAULT_FILE_COUNT_MAX
 
         fun setTag(tag: String?): Builder {
             mTag = tag
@@ -276,6 +279,11 @@ class ELogConfigs private constructor(builder: Builder) {
             return this
         }
 
+        fun setDiskFileCountMax(diskFileCountMax: Int): Builder {
+            mDiskFileCountMax = diskFileCountMax
+            return this
+        }
+
         fun build(): ELogConfigs {
             if (mTag.isNullOrEmpty()) {
                 mTag = DEFAULT_TAG
@@ -313,6 +321,10 @@ class ELogConfigs private constructor(builder: Builder) {
                 mDiskFileSizeKB = DEFAULT_FILE_SIZE_KB
             }
 
+            if (mDiskFileCountMax <= 0) {
+                mDiskFileCountMax = DEFAULT_FILE_COUNT_MAX
+            }
+
             return ELogConfigs(this)
         }
     }
@@ -344,6 +356,7 @@ class ELogConfigs private constructor(builder: Builder) {
         internal const val DEFAULT_DATA_FORMAT = "yyyy.MM.dd HH:mm:ss.SSS"
         internal const val DEFAULT_DIR = "ELog"
         internal const val DEFAULT_FILE_SIZE_KB = 500 // 500KB averages to a 4000 lines per file
+        internal const val DEFAULT_FILE_COUNT_MAX = Int.MAX_VALUE
 
         //constant
         internal const val BYTES_KB = 1024 // 1KB

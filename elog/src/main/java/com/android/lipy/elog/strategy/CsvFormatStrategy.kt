@@ -5,6 +5,7 @@ import android.os.HandlerThread
 import com.android.lipy.elog.ELogConfigs.Companion.BYTES_KB
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DATA_FORMAT
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DIR
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_FILE_COUNT_MAX
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_FILE_SIZE_KB
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_THREAD_INFO
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_TIME_MS
@@ -110,8 +111,9 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
         internal var dateFormat: SimpleDateFormat? = null
         internal var logStrategy: LogStrategy? = null
 
-        private var diskPath: String? = null
-        private var diskFileSize: Int = DEFAULT_FILE_SIZE_KB * BYTES_KB
+        private var path: String? = null
+        private var fileSize: Int = DEFAULT_FILE_SIZE_KB * BYTES_KB
+        private var fileCountMax: Int = DEFAULT_FILE_COUNT_MAX
 
         fun tag(value: String?): Builder {
             tag = value
@@ -143,13 +145,18 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
             return this
         }
 
-        fun diskPath(value: String?): Builder {
-            diskPath = value
+        fun path(value: String?): Builder {
+            path = value
             return this
         }
 
-        fun diskFileSize(value: Int): Builder {
-            diskFileSize = value
+        fun fileSize(value: Int): Builder {
+            fileSize = value
+            return this
+        }
+
+        fun fileCountMax(value: Int): Builder {
+            fileCountMax = value
             return this
         }
 
@@ -161,19 +168,23 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
                 dateFormat = SimpleDateFormat(DEFAULT_DATA_FORMAT, Locale.UK)
             }
             if (logStrategy == null) {
-                if (diskPath.isNullOrEmpty()) {
-                    diskPath = Environment.getExternalStorageDirectory().absolutePath
+                if (path.isNullOrEmpty()) {
+                    path = Environment.getExternalStorageDirectory().absolutePath
                 }
-                val folder = diskPath + File.separatorChar + DEFAULT_DIR
+                val folder = path + File.separatorChar + DEFAULT_DIR
 
                 val ht = HandlerThread("AndroidFileELog.$folder")
                 ht.start()
 
-                if (diskFileSize < BYTES_KB) {
-                    diskFileSize = DEFAULT_FILE_SIZE_KB * BYTES_KB
+                if (fileSize < BYTES_KB) {
+                    fileSize = DEFAULT_FILE_SIZE_KB * BYTES_KB
                 }
 
-                val handler = DiskLogStrategy.WriteHandler(ht.looper, folder, diskFileSize)
+                if (fileCountMax <= 0) {
+                    fileCountMax = DEFAULT_FILE_COUNT_MAX
+                }
+
+                val handler = DiskLogStrategy.WriteHandler(ht.looper, folder, fileSize, fileCountMax)
                 logStrategy = DiskLogStrategy(handler)
             }
             return CsvFormatStrategy(this)

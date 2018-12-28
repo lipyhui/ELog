@@ -27,9 +27,10 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
         handler.sendMessage(handler.obtainMessage(priority, message))
     }
 
-    internal class WriteHandler(looper: Looper, folderPath: String, private val maxFileSize: Int) : Handler(checkNotNull(looper)) {
+    internal class WriteHandler(looper: Looper, folderPath: String, private val maxFileSize: Int, private val maxFileCount: Int) : Handler(checkNotNull(looper)) {
 
         private val folderStr: String = checkNotNull(folderPath)
+        private val logFiles = HashMap<Int, String>()
 
         init {
             val folder = File(folderStr)
@@ -40,12 +41,12 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
             }
 
             var existFileCount: Int
-            folder.list { _, name ->
+            folder.list { dir, name ->
                 if (name.startsWith(fileName) && name.endsWith(SUFFIX_NAME)) {
                     try {
                         existFileCount = name.replace("${fileName}_", "").replace(SUFFIX_NAME, "").toInt()
-
                         newFileCount = Math.max(newFileCount, existFileCount)
+                        logFiles[existFileCount] = "$dir${File.separatorChar}$name"
                     } catch (e: Exception) {
                         System.out.println(e)
                     }
@@ -74,7 +75,6 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
                         fileWriter.close()
                     } catch (e1: IOException) { /* fail silently */
                     }
-
                 }
             }
 
@@ -117,12 +117,26 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
 
             return if (existingFile != null) {
                 if (existingFile.length() >= maxFileSize) {
+                    while (logFiles.size > 0 && logFiles.size >= maxFileCount) {
+                        val min = logFiles.keys.min()
+                        File(logFiles[min]).delete()
+                        logFiles.remove(min)
+                    }
+                    logFiles[newFileCount] = newFile.absolutePath
+
                     newFile
                 } else {
                     newFileCount--
                     existingFile
                 }
             } else {
+                while (logFiles.size > 0 && logFiles.size >= maxFileCount) {
+                    val min = logFiles.keys.min()
+                    File(logFiles[min]).delete()
+                    logFiles.remove(min)
+                }
+                logFiles[newFileCount] = newFile.absolutePath
+
                 newFile
             }
         }

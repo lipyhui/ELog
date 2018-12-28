@@ -77,7 +77,8 @@ val configs = ELogConfigs.Builder()
   .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //设置磁盘日志格式。默认“yyyy.MM.dd HH:mm:ss.SSS”
   .setDiskLogStrategy(CustomLogStrategy)                  //自定义磁盘日志打印器。
   .setDiskPath(CustomDiskPath)                            //自定义磁盘日志保存路径，文件保存路径为“CustomDiskPath/ELog/*”。默认日志路径为：“Sdcard/ELog/*”
-  .setDiskFileSizeKB(1024)                            	  //设置磁盘单个文件大小，单位KB。默认500KB
+  .setDiskFileSizeKB(1024)                            	  //设置磁盘单个日志文件大小，单位KB。默认500KB
+  .setDiskFileCountMax(10)                            	  //设置磁盘日志文件最大数量。默认无限制
   .build()
 
   //设置自定义配置项
