@@ -3,6 +3,7 @@ package com.android.lipy.elog.strategy
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import com.android.lipy.elog.ELogConfigs.Companion.SUFFIX_NAME
 import com.android.lipy.elog.interfaces.LogStrategy
 import java.io.File
@@ -81,6 +82,26 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
                 folder.mkdirs()
             }
 
+            var existFileCount: Int
+            if (newFileCount < 0) {
+                folder.list { _, name ->
+                    if (name.startsWith(fileName) && name.endsWith(SUFFIX_NAME)) {
+                        try {
+                            existFileCount = name.replace("${fileName}_", "").replace(SUFFIX_NAME, "").toInt()
+
+                            newFileCount = Math.max(newFileCount, existFileCount)
+                        } catch (e: Exception) {
+                            System.out.println(e)
+                        }
+                    }
+                    return@list true
+                }
+            }
+
+            if (newFileCount < 0) {
+                newFileCount = 0
+            }
+
             var newFile: File
             var existingFile: File? = null
 
@@ -94,13 +115,17 @@ internal class DiskLogStrategy(handler: Handler) : LogStrategy {
             return if (existingFile != null) {
                 if (existingFile.length() >= maxFileSize) {
                     newFile
-                } else existingFile
-            } else newFile
-
+                } else {
+                    newFileCount--
+                    existingFile
+                }
+            } else {
+                newFile
+            }
         }
     }
 
     companion object {
-        private var newFileCount = 0
+        private var newFileCount = -1
     }
 }
