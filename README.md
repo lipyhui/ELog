@@ -62,7 +62,7 @@ val configs = ELogConfigs.Builder()
   .setTag("MyTestConfigs")                                //设置TAG，如果没logcatTag或diskTag，则logcatTag或diskTag使用该Tag。
   //logcat配置项
   .setLogcatTag("TestLogcatTag")                          //设置logcatTag，如果设置了该项，则不使用setTag配置的tag。
-  .setLogcatShowBorder(false)                             //设置logcat是否显示边框、分割线。默认显示
+  .setLogcatShowBorder(false)                             //设置logcat是否显示边框和分割线。默认显示
   .setDiskDebugPriority(Log.WARN)                         //设置logcat日志打印最低级别，配置为ELogConfigs.DEBUG_STOP则不打印日志。默认VERBOSE级别
   .setLogcatMethodCount(7)                                //设置logcat显示方法数，设置为0可取消方法打印。默认2
   .setLogcatMethodOffset(2)                               //设置logcat方法偏移量。默认0
@@ -70,6 +70,8 @@ val configs = ELogConfigs.Builder()
   .setLogcatLogStrategy(CustomLogStrategy)                //自定义logcat日志打印器。
   //disk日志配置项
   .setDiskTag("TestDiskTag")                              //设置diskTag，如果设置了该项，则不使用setTag配置的tag。
+  .setDiskShowTimeMs(true)                                //设置是否显示毫秒时间。默认不显示
+  .setDiskShowThreadInfo(false)                           //设置是否显示线程和包名。默认显示
   .setDiskDebugPriority(ELogConfigs.DEBUG_STOP)           //设置磁盘日志打印最低级别，配置为ELogConfigs.DEBUG_STOP则不打印日志。默认VERBOSE级别
   .setDiskDate(Date(2018, 1, 1, 24, 58))                  //设置磁盘日志时间。默认系统时间
   .setDiskDateFormat(SimpleDateFormat("MM.dd HH:mm"))     //设置磁盘日志格式。默认“yyyy.MM.dd HH:mm:ss.SSS”

@@ -2,8 +2,11 @@ package com.android.lipy.elog.strategy
 
 import android.os.Environment
 import android.os.HandlerThread
+import com.android.lipy.elog.ELogConfigs
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DATA_FORMAT
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_DIR
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_THREAD_INFO
+import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_SHOW_TIME_MS
 import com.android.lipy.elog.ELogConfigs.Companion.DEFAULT_TAG
 import com.android.lipy.elog.Utils
 import com.android.lipy.elog.interfaces.FormatStrategy
@@ -20,6 +23,8 @@ import java.util.*
 internal class CsvFormatStrategy private constructor(builder: Builder) : FormatStrategy {
 
     private val tag: String?
+    private val showTimeMs: Boolean
+    private val showThreadInfo: Boolean
     private val date: Date
     private val dateFormat: SimpleDateFormat
     private val logStrategy: LogStrategy
@@ -28,6 +33,8 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
         checkNotNull(builder)
 
         tag = builder.tag
+        showTimeMs = builder.showTimeMs
+        showThreadInfo = builder.showThreadInfo
         date = builder.date!!
         dateFormat = builder.dateFormat!!
         logStrategy = builder.logStrategy!!
@@ -43,35 +50,38 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
 
         val builder = StringBuilder()
 
-        // machine-readable date/time
-        builder.append(java.lang.Long.toString(date.time))
-
+        if (showTimeMs) {
+            // machine-readable date/time
+            builder.append(date.time)
+            builder.append(SEPARATOR)
+        }
         // human-readable date/time
-        builder.append(SEPARATOR)
         builder.append(dateFormat.format(date))
-
-        //Thread
         builder.append(SPACE)
-        builder.append(android.os.Process.myPid())
-        builder.append(THREAD_SEPARATOR)
-        builder.append(Thread.currentThread().name)
-        //Process
-        builder.append(SEPARATOR)
-        builder.append(Utils.getProcessName())
+
+        if (showThreadInfo) {
+            //Thread
+            builder.append(android.os.Process.myPid())
+            builder.append(THREAD_SEPARATOR)
+            builder.append(Thread.currentThread().name)
+            builder.append(SEPARATOR)
+            //Process
+            builder.append(Utils.getProcessName())
+            builder.append(SPACE)
+        }
 
         // level
-        builder.append(SPACE)
         builder.append(Utils.logLevel(priority))
-        // tag
         builder.append(SEPARATOR)
+        // tag
         builder.append(tag)
+        builder.append(MSG_SEPARATOR)
 
         // message
         if (message.contains(NEW_LINE!!)) {
             // a new line would break the CSV format, so we replace it here
             message = message.replace(NEW_LINE.toRegex(), NEW_LINE_REPLACEMENT)
         }
-        builder.append(MSG_SEPARATOR)
         builder.append(message)
 
         // new line
@@ -93,13 +103,25 @@ internal class CsvFormatStrategy private constructor(builder: Builder) : FormatS
     class Builder internal constructor() {
 
         internal var tag: String? = DEFAULT_TAG
+        internal var showTimeMs: Boolean = DEFAULT_SHOW_TIME_MS
+        internal var showThreadInfo: Boolean = DEFAULT_SHOW_THREAD_INFO
         internal var date: Date? = null
         internal var dateFormat: SimpleDateFormat? = null
         internal var logStrategy: LogStrategy? = null
         private var diskPath: String? = null
 
-        fun tag(tag: String?): Builder {
-            this.tag = tag
+        fun tag(value: String?): Builder {
+            tag = value
+            return this
+        }
+
+        fun showTimeMs(value: Boolean): Builder {
+            showTimeMs = value
+            return this
+        }
+
+        fun showThreadInfo(value: Boolean): Builder {
+            showThreadInfo = value
             return this
         }
 
