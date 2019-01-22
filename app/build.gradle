@@ -29,7 +29,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation project(':elog')
+//    implementation project(':elog')
+    implementation 'com.github.lipyhui:ELog:v1.0.2'
 }
 repositories {
     mavenCentral()

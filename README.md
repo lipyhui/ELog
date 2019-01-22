@@ -18,7 +18,7 @@ allprojects {
 &emsp;&emsp;在应用的build.gradle中添加ELog:
 ```
 dependencies {
-	implementation 'com.github.lipyhui:ELog:v1.0.2'
+	implementation 'com.github.lipyhui:ELog:1.0.2'
 }
 ```
 
@@ -38,7 +38,7 @@ dependencies {
 <dependency>
 	<groupId>com.github.lipyhui</groupId>
 	<artifactId>ELog</artifactId>
-	<version>v1.0.2</version>
+	<version>1.0.2</version>
 </dependency>
 ```
 
